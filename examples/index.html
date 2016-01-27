@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta name="description" content="Image puzzle test">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>JS Bin</title>
+
+    <style>
+      #img-puzzle {
+        position: relative;
+        overflow: hidden;
+        width: 620px;
+        height: 387px;
+        margin: 20% auto;
+        border: 2px solid red;
+      }
+
+      #img-puzzle_img {
+        display: block;
+        position: relative;
+        z-index: 1;
+      }
+
+      .img-puzzle_piece {
+        display: block;
+        position: absolute;
+        box-sizing: border-box;
+        border: 1px solid red;
+        background-repeat: no-repeat;
+        z-index: 10;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="img-puzzle">
+      <img src="http://i.telegraph.co.uk/multimedia/archive/02792/mountCook2_2792612b.jpg" alt="image" id="img-puzzle_img">
+    </div>
+
+    <!-- Import script -->
+    <script src="../build/image-puzzle.js"></script>
+  </body>
+</html>
