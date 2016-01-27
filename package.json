@@ -24,7 +24,7 @@
     "test": "babel-tape-runner ./tests/*.js | tap-spec",
     "build": "browserify -d index.js -o ./build/image-puzzle.js",
     "watch": "watchify -dv -t babelify index.js -o ./build/image-puzzle.js",
-    "serve": "http-server ./examples/",
+    "serve": "http-server ./",
     "start": "npm run serve -- -o"
   },
   "browserify": {
