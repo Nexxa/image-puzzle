@@ -1,0 +1,7 @@
+/node_modules
+/tests
+/examples
+.eslintrc
+.babelrc
+.npmrc
+.editorconfig

@@ -1,0 +1,14 @@
+{
+  "presets": ["es2015"],
+  "plugins": [
+    "transform-remove-debugger",
+    "transform-property-literals",
+    "transform-minify-booleans",
+    "transform-merge-sibling-variables",
+    "transform-member-expression-literals",
+    "transform-strict-mode"
+  ],
+  "comments": false,
+  "sourceMaps": true,
+  "compact": true
+}

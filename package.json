@@ -1,0 +1,54 @@
+{
+  "name": "image-puzzle",
+  "version": "0.0.1",
+  "main": "index.js",
+  "description": "Javascript random image puzzle",
+  "author": "StefanoMagrassi <stefano.magrassi@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/Nexxa/image-puzzle#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nexxa/image-puzzle.git"
+  },
+  "keywords": [
+    "image",
+    "puzzle",
+    "random"
+  ],
+  "bugs": {
+    "url": "https://github.com/Nexxa/image-puzzle/issues"
+  },
+  "scripts": {
+    "lint": "eslint index.js ./lib/.",
+    "pretest": "npm run lint",
+    "test": "babel-tape-runner ./tests/*.js | tap-spec",
+    "build": "browserify -d index.js -o ./build/image-puzzle.js",
+    "watch": "watchify -dv -t babelify index.js -o ./build/image-puzzle.js",
+    "serve": "http-server ./examples/",
+    "start": "npm run serve -- -o"
+  },
+  "browserify": {
+    "transform": ["babelify"]
+  },
+  "dependencies": {
+    "lodash": "4.0.1"
+  },
+  "devDependencies": {
+    "babel-cli": "6.4.5",
+    "babel-eslint": "4.1.6",
+    "babel-plugin-transform-member-expression-literals": "6.3.13",
+    "babel-plugin-transform-merge-sibling-variables": "6.3.13",
+    "babel-plugin-transform-minify-booleans": "6.3.13",
+    "babel-plugin-transform-property-literals": "6.3.13",
+    "babel-plugin-transform-remove-debugger": "6.3.13",
+    "babel-plugin-transform-strict-mode": "6.3.13",
+    "babel-preset-es2015": "6.3.13",
+    "babel-tape-runner": "2.0.0",
+    "babelify": "7.2.0",
+    "eslint": "1.10.3",
+    "http-server": "0.8.5",
+    "tap-spec": "4.1.1",
+    "tape": "4.4.0",
+    "watchify": "3.7.0"
+  }
+}
