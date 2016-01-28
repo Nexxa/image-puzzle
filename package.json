@@ -25,16 +25,18 @@
   ],
   "config": {
     "babelify": "-t babelify",
-    "build_output": "index.js -o ./build/image-puzzle.js"
+    "build_output": "./examples/image-puzzle.js -o ./examples/bundle.js"
   },
   "scripts": {
+    "clean": "rimraf ./examples/bundle.js",
     "lint": "eslint index.js ./lib/.",
     "pretest": "npm run lint",
     "test:js": "babel-tape-runner ./tests/*.js | tap-spec",
     "test:browser": "browserify $npm_package_config_babelify ./tests/browser/*.js | tape-run --render=\"tap-spec\"",
     "test": "npm run test:js && npm run test:browser",
-    "build": "browserify -d $npm_package_config_babelify $npm_package_config_build_output",
+    "example": "browserify -d $npm_package_config_babelify $npm_package_config_build_output",
     "watch": "watchify -dv $npm_package_config_babelify $npm_package_config_build_output",
+    "preserve": "npm run clean && npm run example",
     "serve": "http-server ./",
     "start": "npm run serve -- -o"
   },
@@ -55,6 +57,7 @@
     "babelify": "7.2.0",
     "eslint": "1.10.3",
     "http-server": "0.8.5",
+    "rimraf": "2.5.1",
     "tap-spec": "4.1.1",
     "tape": "4.4.0",
     "tape-run": "2.1.3",
