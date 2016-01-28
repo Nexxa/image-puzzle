@@ -18,6 +18,11 @@
   "bugs": {
     "url": "https://github.com/Nexxa/image-puzzle/issues"
   },
+  "engines": [
+    {
+      "node": ">=0.12"
+    }
+  ],
   "scripts": {
     "lint": "eslint index.js ./lib/.",
     "pretest": "npm run lint",
@@ -28,10 +33,12 @@
     "start": "npm run serve -- -o"
   },
   "browserify": {
-    "transform": ["babelify"]
+    "transform": [
+      "babelify"
+    ]
   },
   "dependencies": {
-    "lodash": "4.0.1"
+    "lodash-es": "4.0.1"
   },
   "devDependencies": {
     "babel-cli": "6.4.5",
