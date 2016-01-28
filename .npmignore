@@ -1,8 +1,9 @@
+/build
+/examples
 /node_modules
 /tests
-/examples
-/build
-.eslintrc
 .babelrc
-.npmrc
 .editorconfig
+.eslintrc
+.npmrc
+.travis.yml
