@@ -3,6 +3,8 @@ Javascript random image puzzle game.
 
 ## Contributing
 
+This repository follow the [git-flow](http://nvie.com/posts/a-successful-git-branching-model/) branching model and the [semver](http://semver.org/) specification for versioning.
+
 There are some little script to help development and code management:
 
 - `start` will open the default browser and runs `serve` which starts a simple http-server, so you can navigate to */examples* directory;
