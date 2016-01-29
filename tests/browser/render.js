@@ -26,7 +26,6 @@ test('render() returns the collection of image pieces', function(t) {
   });
 });
 
-
 test('render() puts pieces on image', function(t) {
   t.plan(1);
 
