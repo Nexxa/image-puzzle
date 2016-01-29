@@ -7,13 +7,14 @@
 // -------
 import imagePuzzle from '../index';
 
+// Logic
+// -----
 const IMG_ID = 'img-puzzle_img';
-let image = document.getElementById(IMG_ID);
 
-image.onload = run;
+document.body.onload = run;
 
 function run() {
-  let image = this;
+  let image = document.getElementById(IMG_ID);
 
   return imagePuzzle(image, 3, 3);
 }
