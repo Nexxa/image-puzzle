@@ -1,7 +1,7 @@
 // Imports
 // -------
 import test from 'tape';
-import pieces from '../lib/pieces';
+import {pieces, random} from '../lib/pieces';
 
 // Tests
 // -----
@@ -22,3 +22,34 @@ test('pieces() returns a collection of pieces', function(t) {
 
   t.end();
 });
+
+test('random() return a random collection of pieces', function(t) {
+  let rows     = 2;
+  let cols     = 2;
+  let w        = 100;
+  let h        = 100;
+  let p        = pieces(rows, cols, w, h);
+  let r        = random(rows, cols, w, h);
+  let hasProps = hasProperties(r[0], ['row', 'col', 'index', 'width', 'oriX', 'oriY']);
+
+  t.equal(r.length, rows * cols, 'collection length should be the number of rows and columns');
+  t.ok(hasProps, 'elements of collection should have the correct properties');
+  t.notDeepEqual(p, r, 'random collection should be different from standard collection');
+
+  t.end();
+});
+
+// Private methods
+// ---------------
+/**
+ * Checks if object has specified properties.
+ * @private
+ * @param  {object} obj   - The object
+ * @param  {array}  props - Array of property names to check
+ * @return {boolean}
+ */
+function hasProperties(obj, props) {
+  return props.reduce(function(acc, prop) {
+    return (acc && obj.hasOwnProperty(prop));
+  }, true);
+}
