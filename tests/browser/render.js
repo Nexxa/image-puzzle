@@ -15,7 +15,7 @@ test('render() returns the collection of image pieces', function(t) {
     let rows   = 2;
     let cols   = 2;
     let actual = _sortBy(_keys(render(image, rows, cols)[0]));
-    let expect = _sortBy(['row', 'col', 'index', 'width', 'height', 'randomIndex', 'x', 'y']);
+    let expect = _sortBy(['row', 'col', 'position', 'width', 'height', 'index', 'x', 'y']);
 
     t.deepEqual(actual, expect, 'should return the collection of pieces');
   });
