@@ -2,8 +2,10 @@
 // -------
 import test from 'tape';
 import _keys from 'lodash/keys';
+import _values from 'lodash/values';
 import _sortBy from 'lodash/sortBy';
 import render from '../../lib/render';
+import {KEYS} from '../../lib/pieces';
 
 // Tests
 // -----
@@ -15,7 +17,7 @@ test('render() returns the collection of image pieces', function(t) {
     let rows   = 2;
     let cols   = 2;
     let actual = _sortBy(_keys(render(image, rows, cols)[0]));
-    let expect = _sortBy(['row', 'col', 'position', 'width', 'height', 'index', 'x', 'y']);
+    let expect = _sortBy(_values(KEYS));
 
     t.deepEqual(actual, expect, 'should return the collection of pieces');
   });

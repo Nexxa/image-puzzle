@@ -2,8 +2,9 @@
 // -------
 import test from 'tape';
 import _keys from 'lodash/keys';
+import _values from 'lodash/values';
 import _sortBy from 'lodash/sortBy';
-import {pieces, random} from '../lib/pieces';
+import {pieces, random, KEYS} from '../lib/pieces';
 
 // Tests
 // -----
@@ -33,7 +34,7 @@ test('random() return a random collection of pieces', function(t) {
   let r     = random(rows, cols, w, h);
   let p     = _sortBy(_keys(pieces(rows, cols, w, h)[0]));
   let rs    = _sortBy(_keys(r[0]));
-  let props = _sortBy(['row', 'col', 'position', 'width', 'height', 'index', 'x', 'y']);
+  let props = _sortBy(_values(KEYS));
 
   t.equal(r.length, rows * cols, 'collection length should be the number of rows and columns');
   t.deepEqual(rs, props, 'elements of collection should have the correct properties');
