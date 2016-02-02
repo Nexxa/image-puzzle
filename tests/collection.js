@@ -12,10 +12,10 @@ test('collection() returns a collection of items', function(t) {
   let h      = 100;
   let actual = collection(rows, cols, w, h);
   let expect = [
-    {row:0, col:0, position:0, width:w, height:h, bgX:0,    bgY:0},
-    {row:0, col:1, position:1, width:w, height:h, bgX:-(w), bgY:0},
-    {row:1, col:0, position:2, width:w, height:h, bgX:0,    bgY:-(h)},
-    {row:1, col:1, position:3, width:w, height:h, bgX:-(w), bgY:-(h)}
+    {row:0, col:0, position:0, width:w, height:h, x:0, y:0, bgX:0,    bgY:0},
+    {row:0, col:1, position:1, width:w, height:h, x:w, y:0, bgX:-(w), bgY:0},
+    {row:1, col:0, position:2, width:w, height:h, x:0, y:h, bgX:0,    bgY:-(h)},
+    {row:1, col:1, position:3, width:w, height:h, x:w, y:h, bgX:-(w), bgY:-(h)}
   ];
 
   t.deepEqual(actual, expect, 'should returns a collection of items');
