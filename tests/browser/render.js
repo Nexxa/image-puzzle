@@ -1,8 +1,6 @@
 // Imports
 // -------
 import test from 'tape';
-import _keys from 'lodash/keys';
-import _sortBy from 'lodash/sortBy';
 import render from '../../lib/render';
 
 // Tests
@@ -11,13 +9,14 @@ test('render() returns the collection of image pieces', function(t) {
   t.plan(1);
 
   testImage(function() {
-    let image  = this;
-    let rows   = 2;
-    let cols   = 2;
-    let actual = _sortBy(_keys(render(image, rows, cols)[0]));
-    let expect = _sortBy(['row', 'col', 'index', 'width', 'height', 'randomIndex', 'x', 'y']);
+    let image    = this;
+    let rows     = 10;
+    let cols     = 10;
+    let rendered = render(image, rows, cols);
+    let actual   = rendered.length;
+    let expect   = rows * cols;
 
-    t.deepEqual(actual, expect, 'should return the collection of pieces');
+    t.equal(actual, expect, 'rendered should be as length as the number of rows and columns');
   });
 });
 
@@ -27,16 +26,16 @@ test('render() puts pieces on image', function(t) {
   testImage(function() {
     let image = this;
 
-    t.ok(render(image, 1, 1), 'should be ok');
+    t.ok(render(image, 1, 1), 'should not have errors');
   });
 });
 
-test('render() fails without image', function(t) {
+test('render() needs and image element', function(t) {
   t.plan(1);
 
   let image;
 
-  t.notOk(render(image, 3, 3), 'should be not ok');
+  t.notOk(render(image, 3, 3), 'should fail without image');
 });
 
 // Private methods
@@ -57,7 +56,7 @@ function testImage(cb) {
     return cb.call(image);
   }
 
-  image    = document.createElement('img');
+  image        = document.createElement('img');
   image.src    = IMAGE_PATH;
   image.onload = cb;
 
