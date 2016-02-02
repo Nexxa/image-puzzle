@@ -6,7 +6,7 @@
 // Imports
 // -------
 import test from 'tape';
-import {default as item, bgX, bgY} from '../lib/item';
+import item from '../lib/item';
 
 // Tests
 // -----
@@ -23,33 +23,13 @@ test('item() returns an "item" object', function(t) {
     col     : col,
     width   : width,
     height  : height,
+    x       : 100,
+    y       : 0,
     bgX     : -100,
     bgY     : 0
   };
 
   t.deepEqual(actual, expect, 'should returns an item object');
-
-  t.end();
-});
-
-test('bgX() returns background "x"-position', function(t) {
-  let width  = 100;
-  let column = 1;
-  let actual = bgX(width, column);
-  let expect = -(width * column);
-
-  t.equal(actual, expect, 'should return background "x"-position based on width and column');
-
-  t.end();
-});
-
-test('bgY() returns background "y"-position', function(t) {
-  let height = 100;
-  let row    = 0;
-  let actual = bgY(height, row);
-  let expect = -(height * row);
-
-  t.equal(actual, expect, 'should return background "y"-position based on height and row');
 
   t.end();
 });
