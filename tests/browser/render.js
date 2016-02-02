@@ -1,7 +1,7 @@
 // Imports
 // -------
 import test from 'tape';
-import render from '../../lib/render';
+import {default as render, update} from '../../lib/render';
 
 // Tests
 // -----
@@ -55,6 +55,16 @@ test('render() with existent data', function(t) {
     let actual = render(image, rows, cols, data);
 
     t.deepEqual(actual, data, 'should returns the passed data');
+  });
+});
+
+test('update() refresh puzzle pieces', function(t) {
+  t.plan(1);
+
+  testImage(function() {
+    let image  = this;
+
+    t.ok(update(image), 'should not have errors');
   });
 });
 
