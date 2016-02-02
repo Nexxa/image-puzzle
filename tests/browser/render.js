@@ -38,6 +38,26 @@ test('render() needs and image element', function(t) {
   t.notOk(render(image, 3, 3), 'should fail without image');
 });
 
+test('render() with existent data', function(t) {
+  t.plan(1);
+
+  let data = [
+    {row:0, col:0, position:0, width:100, height:100, bgX:0,    bgY:0},
+    {row:0, col:1, position:1, width:100, height:100, bgX:-100, bgY:0},
+    {row:1, col:0, position:2, width:100, height:100, bgX:0,    bgY:-100},
+    {row:1, col:1, position:3, width:100, height:100, bgX:-100, bgY:-100}
+  ];
+
+  testImage(function() {
+    let image  = this;
+    let rows   = 2;
+    let cols   = 2;
+    let actual = render(image, rows, cols, data);
+
+    t.deepEqual(actual, data, 'should returns the passed data');
+  });
+});
+
 // Private methods
 // ---------------
 /**
