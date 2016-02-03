@@ -6,7 +6,7 @@
 // Imports
 // -------
 import test from 'tape';
-import {default as render, update} from '../../lib/render';
+import puzzle from '../../lib/puzzle';
 
 // Constants
 // ---------
@@ -14,14 +14,14 @@ const IMAGE_PATH = 'http://i.telegraph.co.uk/multimedia/archive/02792/mountCook2
 
 // Tests
 // -----
-test('render() returns the collection of image pieces', function(t) {
+test('run() returns the collection of image pieces', function(t) {
   t.plan(1);
 
   testImage(function() {
     let image    = this;
     let rows     = 10;
     let cols     = 10;
-    let rendered = render(image, rows, cols);
+    let rendered = puzzle.run(image, rows, cols);
     let actual   = rendered.length;
     let expect   = rows * cols;
 
@@ -31,7 +31,7 @@ test('render() returns the collection of image pieces', function(t) {
   t.timeoutAfter(10 * 1000);
 });
 
-test('render() with existent data', function(t) {
+test('run() with existent data', function(t) {
   t.plan(1);
 
   let data = [
@@ -45,7 +45,7 @@ test('render() with existent data', function(t) {
     let image  = this;
     let rows   = 2;
     let cols   = 2;
-    let actual = render(image, rows, cols, data);
+    let actual = puzzle.run(image, rows, cols, data);
 
     t.deepEqual(actual, data, 'should returns the passed data');
   });
@@ -59,7 +59,7 @@ test('update() refresh puzzle pieces', function(t) {
   testImage(function() {
     let image = this;
 
-    t.ok(update(image), 'should not have errors');
+    t.ok(puzzle.update(image), 'should not have errors');
   });
 
   t.timeoutAfter(10 * 1000);
