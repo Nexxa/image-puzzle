@@ -6,7 +6,7 @@
 // Imports
 // -------
 import _partial from 'lodash/partial';
-import {default as render, update} from './lib/render';
+import puzzle from './lib/puzzle';
 
 // Exports
 // -------
@@ -36,7 +36,17 @@ function imagePuzzle(image = null, rows = DEFAULT_ROWS, cols = DEFAULT_COLS) {
     image : image,
     rows  : rows,
     cols  : cols,
-    render: _partial(render, image, rows, cols),
-    update: _partial(update, image, rows, cols)
+    run   : run(image, rows, cols),
+    update: update(image, rows, cols)
   };
+}
+
+// Private methods
+// ---------------
+function run(image, rows, cols) {
+  return _partial(puzzle.run, image, rows, cols);
+}
+
+function update(image, rows, cols) {
+  return _partial(puzzle.update, image, rows, cols);
 }

@@ -18,7 +18,7 @@ function run() {
   let image = document.getElementById(IMG_ID);
   let puzzle = imagePuzzle(image, 3, 3);
 
-  puzzle.render();
+  puzzle.run();
 
   let updateBtn = document.getElementById(UPDATE_BTN_ID);
   updateBtn.onclick = function() {
