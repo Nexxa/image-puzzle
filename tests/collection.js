@@ -17,9 +17,9 @@ test('collection() returns a collection of items', function(t) {
   let cols   = 2;
   let actual = collection(w, h, rows, cols);
   let expect = [
-    [{row:0, col:0, width:100, height:100, x:0, y:0}, {position:0, bgX:0,    bgY:0}],
+    [{row:0, col:0, width:100, height:100, x:0, y:0}, {position:0, bgX:0, bgY:0}],
     [{row:0, col:1, width:100, height:100, x:100, y:0}, {position:1, bgX:-100, bgY:0}],
-    [{row:1, col:0, width:100, height:100, x:0, y:100}, {position:2, bgX:0,    bgY:-100}],
+    [{row:1, col:0, width:100, height:100, x:0, y:100}, {position:2, bgX:0,bgY:-100}],
     [{row:1, col:1, width:100, height:100, x:100, y:100}, {position:3, bgX:-100, bgY:-100}]
   ];
 
