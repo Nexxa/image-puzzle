@@ -8,6 +8,10 @@
 import test from 'tape';
 import {default as render, update} from '../../lib/render';
 
+// Constants
+// ---------
+const IMAGE_PATH = 'http://i.telegraph.co.uk/multimedia/archive/02792/mountCook2_2792612b.jpg';
+
 // Tests
 // -----
 test('render() returns the collection of image pieces', function(t) {
@@ -23,6 +27,8 @@ test('render() returns the collection of image pieces', function(t) {
 
     t.equal(actual, expect, 'rendered should be as length as the number of rows and columns');
   });
+
+  t.timeoutAfter(10 * 1000);
 });
 
 test('render() with existent data', function(t) {
@@ -43,6 +49,8 @@ test('render() with existent data', function(t) {
 
     t.deepEqual(actual, data, 'should returns the passed data');
   });
+
+  t.timeoutAfter(10 * 1000);
 });
 
 test('update() refresh puzzle pieces', function(t) {
@@ -53,6 +61,8 @@ test('update() refresh puzzle pieces', function(t) {
 
     t.ok(update(image), 'should not have errors');
   });
+
+  t.timeoutAfter(10 * 1000);
 });
 
 // Private methods
@@ -65,7 +75,6 @@ test('update() refresh puzzle pieces', function(t) {
  */
 function testImage(cb) {
   const ID         = 'img-puzzle_img';
-  const IMAGE_PATH = 'http://i.telegraph.co.uk/multimedia/archive/02792/mountCook2_2792612b.jpg';
 
   let image = document.getElementById(ID);
 

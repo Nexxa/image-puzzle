@@ -55,6 +55,8 @@ test('addTo() adds a puzzle piece to image', function(t) {
 
     t.deepEqual(actual, expect, 'puzzle piece should be a child of image');
   });
+
+  t.timeoutAfter(10 * 1000);
 });
 
 test('list() returns the puzzle piece elements in container', function(t) {
@@ -80,6 +82,8 @@ test('list() returns the puzzle piece elements in container', function(t) {
 
     t.equal(actual, expect, 'list of puzzle piece should be equal to items');
   });
+
+  t.timeoutAfter(10 * 1000);
 });
 
 // Private methods
