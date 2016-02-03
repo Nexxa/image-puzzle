@@ -32,21 +32,45 @@ function imagePuzzle(image = null, rows = DEFAULT_ROWS, cols = DEFAULT_COLS) {
     return null;
   }
 
-  return {
-    image : image,
-    rows  : rows,
-    cols  : cols,
-    run   : run(image, rows, cols),
-    update: update(image, rows, cols)
-  };
+  return start({
+    image: image,
+    rows : rows,
+    cols : cols
+  });
 }
 
 // Private methods
 // ---------------
-function run(image, rows, cols) {
+/**
+ * Creates a new image puzzle object with specified options.
+ * @param  {object} opts - Options object
+ * @return {object} Image puzzle object
+ */
+function start(opts) {
+  return {
+    run   : run(opts),
+    update: update(opts)
+  };
+}
+
+/**
+ * Runs the puzzle with specified options.
+ * @param  {object} opts - Options object
+ * @return {function} Partially applied run function
+ */
+function run(opts) {
+  let {image, rows, cols} = opts;
+
   return _partial(puzzle.run, image, rows, cols);
 }
 
-function update(image, rows, cols) {
+/**
+ * Updates the puzzle pieces.
+ * @param  {object} opts - Options object
+ * @return {function} Partially applied update function
+ */
+function update(opts) {
+  let {image, rows, cols} = opts;
+
   return _partial(puzzle.update, image, rows, cols);
 }
