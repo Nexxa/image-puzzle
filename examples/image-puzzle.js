@@ -16,7 +16,7 @@ document.body.onload = run;
 
 function run() {
   let image = document.getElementById(IMG_ID);
-  let puzzle = imagePuzzle(image, 4, 4);
+  let puzzle = imagePuzzle(image, 3, 3);
 
   puzzle.render();
 
