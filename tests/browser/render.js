@@ -1,7 +1,16 @@
+/**
+ * @file Render module - tests
+ * @author StefanoMagrassi <stefano.magrassi@gmail.com>
+ */
+
 // Imports
 // -------
 import test from 'tape';
-import render from '../../lib/render';
+import {default as render, update} from '../../lib/render';
+
+// Constants
+// ---------
+const IMAGE_PATH = 'http://i.telegraph.co.uk/multimedia/archive/02792/mountCook2_2792612b.jpg';
 
 // Tests
 // -----
@@ -18,34 +27,18 @@ test('render() returns the collection of image pieces', function(t) {
 
     t.equal(actual, expect, 'rendered should be as length as the number of rows and columns');
   });
-});
 
-test('render() puts pieces on image', function(t) {
-  t.plan(1);
-
-  testImage(function() {
-    let image = this;
-
-    t.ok(render(image, 1, 1), 'should not have errors');
-  });
-});
-
-test('render() needs and image element', function(t) {
-  t.plan(1);
-
-  let image;
-
-  t.notOk(render(image, 3, 3), 'should fail without image');
+  t.timeoutAfter(10 * 1000);
 });
 
 test('render() with existent data', function(t) {
   t.plan(1);
 
   let data = [
-    {row:0, col:0, position:0, width:100, height:100, bgX:0,    bgY:0},
-    {row:0, col:1, position:1, width:100, height:100, bgX:-100, bgY:0},
-    {row:1, col:0, position:2, width:100, height:100, bgX:0,    bgY:-100},
-    {row:1, col:1, position:3, width:100, height:100, bgX:-100, bgY:-100}
+    [{row:0, col:0, width:100, height:100, x:0, y:0},{position:0, bgX:0, bgY:0}],
+    [{row:0, col:1, width:100, height:100, x:100, y:0},{position:1, bgX:-100, bgY:0}],
+    [{row:1, col:0, width:100, height:100, x:0, y:-100},{position:2, bgX:0, bgY:-100}],
+    [{row:1, col:1, width:100, height:100, x:-100, y:-100},{position:3, bgX:-100, bgY:-100}]
   ];
 
   testImage(function() {
@@ -56,6 +49,20 @@ test('render() with existent data', function(t) {
 
     t.deepEqual(actual, data, 'should returns the passed data');
   });
+
+  t.timeoutAfter(10 * 1000);
+});
+
+test('update() refresh puzzle pieces', function(t) {
+  t.plan(1);
+
+  testImage(function() {
+    let image = this;
+
+    t.ok(update(image), 'should not have errors');
+  });
+
+  t.timeoutAfter(10 * 1000);
 });
 
 // Private methods
@@ -68,7 +75,6 @@ test('render() with existent data', function(t) {
  */
 function testImage(cb) {
   const ID         = 'img-puzzle_img';
-  const IMAGE_PATH = 'http://i.telegraph.co.uk/multimedia/archive/02792/mountCook2_2792612b.jpg';
 
   let image = document.getElementById(ID);
 
@@ -76,9 +82,11 @@ function testImage(cb) {
     return cb.call(image);
   }
 
-  image        = document.createElement('img');
-  image.src    = IMAGE_PATH;
-  image.onload = cb;
+  let container = document.body.appendChild(document.createElement('div'));
+  image         = document.createElement('img');
+  image.id      = ID;
+  image.src     = IMAGE_PATH;
+  image.onload  = cb;
 
-  return document.body.appendChild(image);
+  return container.appendChild(image);
 }
