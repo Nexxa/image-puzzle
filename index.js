@@ -28,7 +28,14 @@ export const DEFAULT_COLS = 3;
 // Public methods
 // --------------
 /**
- * Creates a new Image Puzzle object.
+ * Creates a new Image Puzzle object.<br/>
+ * Available configuration:
+ * {
+ *   rows: <Number>, // Number of rows - Default 3
+ *   cols: <Number>, // Number of columns - Default 3
+ *   data: <Array>,  // Data loaded from another source (localStorge, ajax etc) - Default null
+ * }
+ *
  * @public
  * @param  {HTMLImageElement} [image=null] - Image html element
  * @param  {object}           opts         - Configuration
@@ -52,6 +59,27 @@ function update() {
   let {image, rows, cols} = config();
 
   return puzzle.update(image, rows, cols);
+}
+
+/**
+ * Gets the current game state as simple object or JSON string.
+ * @private
+ * @param  {boolean} asString - If true gets the stringify version of state object
+ * @return {[object|string]} Game state object or string -> {rows, cols, data}
+ */
+function state(asString = false) {
+  let {rows, cols} = config();
+  let current      = {
+    rows: rows,
+    cols: cols,
+    data: puzzle.last()
+  };
+
+  if (asString) {
+    return JSON.stringify(current);
+  }
+
+  return current;
 }
 
 // Private properties
@@ -91,10 +119,11 @@ function config(...sources) {
  */
 function start(opts) {
   return {
-    _first: run(opts),
-    config: config(),
-    update: update,
-    last  : puzzle.last
+    _first : run(opts),
+    config : config(),
+    update : update,
+    last   : puzzle.last,
+    state  : state
   };
 }
 

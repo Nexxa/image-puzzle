@@ -19,8 +19,11 @@ const STORAGE_KEY     = 'puzzle';
 document.body.onload = run;
 
 function run() {
-  let image  = document.getElementById(IMG_ID);
-  let puzzle = imagePuzzle(image, {rows: 3, cols: 3});
+  let image     = document.getElementById(IMG_ID);
+  let inSession = sessionStorage.getItem(STORAGE_KEY);
+  let config    = inSession !== null ? JSON.parse(inSession) : {rows: 3, cols: 3};
+
+  let puzzle = imagePuzzle(image, config);
 
   console.log(puzzle);
 
@@ -45,7 +48,7 @@ function run() {
 
   let saveBtn = document.getElementById(SAVE_BTN_ID);
   saveBtn.onclick = function() {
-    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(puzzle.last()));
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(puzzle.state()));
   };
 
   return;
