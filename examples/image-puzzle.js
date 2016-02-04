@@ -16,42 +16,45 @@ const BUILD_66_BTN_ID = 'build66';
 const SAVE_BTN_ID     = 'save';
 const STORAGE_KEY     = 'puzzle';
 
-document.body.onload = run;
+document.addEventListener('DOMContentLoaded', run, false);
 
 function run() {
-  let image     = document.getElementById(IMG_ID);
-  let inSession = sessionStorage.getItem(STORAGE_KEY);
-  let config    = inSession !== null ? JSON.parse(inSession) : {rows: 3, cols: 3};
+  let image  = document.getElementById(IMG_ID);
+  let puzzle = imagePuzzle(image, config());
 
-  let puzzle = imagePuzzle(image, config);
+  click(UPDATE_BTN_ID, () => puzzle.update());
 
-  console.log(puzzle);
-
-  //puzzle.run(JSON.parse(sessionStorage.getItem(STORAGE_KEY)));
-
-  let updateBtn = document.getElementById(UPDATE_BTN_ID);
-  updateBtn.onclick = function() {
-    puzzle.update();
-  };
-
-  let build33Btn = document.getElementById(BUILD_33_BTN_ID);
-  build33Btn.onclick = function() {
+  click(BUILD_33_BTN_ID, function() {
     clean(image.parentNode);
     puzzle = imagePuzzle(image, {rows: 3, cols: 3});
-  };
+  });
 
-  let build66Btn = document.getElementById(BUILD_66_BTN_ID);
-  build66Btn.onclick = function() {
+  click(BUILD_66_BTN_ID, function() {
     clean(image.parentNode);
     puzzle = imagePuzzle(image, {rows: 6, cols: 6});
-  };
+  });
 
-  let saveBtn = document.getElementById(SAVE_BTN_ID);
-  saveBtn.onclick = function() {
-    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(puzzle.state()));
-  };
+  click(SAVE_BTN_ID, () => save(puzzle.state(true)));
 
   return;
+}
+
+function config() {
+  let inSession = sessionStorage.getItem(STORAGE_KEY);
+
+  if (inSession !== null) {
+    return JSON.parse(inSession);
+  }
+
+  return {rows: 3, cols: 3};
+}
+
+function click(id, cb) {
+  document.getElementById(id).addEventListener('click', cb);
+}
+
+function save(content) {
+  return sessionStorage.setItem(STORAGE_KEY, content);
 }
 
 function clean(node) {
