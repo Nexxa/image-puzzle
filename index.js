@@ -49,7 +49,8 @@ function imagePuzzle(image = null, rows = DEFAULT_ROWS, cols = DEFAULT_COLS) {
 function start(opts) {
   return {
     run   : run(opts),
-    update: update(opts)
+    update: update(opts),
+    last  : puzzle.last
   };
 }
 
