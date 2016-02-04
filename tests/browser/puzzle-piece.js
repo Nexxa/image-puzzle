@@ -12,7 +12,7 @@ import {ELEMENT_TYPE, CSS_CLASS} from '../../lib/puzzle-piece';
 
 // Tests
 // -----
-test('element() returns a new puzzle piece as html element', function(t) {
+test('puzzlePiece.element() returns a new puzzle piece as html element', function(t) {
   let cell   = {row: 0, col: 0, width: 100, height: 100, x: 0, y: 0};
   let item   = {position: 0, bgX: 0, bgY: 0};
   let piece  = puzzlePiece.element(cell, item, IMAGE_PATH);
@@ -23,7 +23,7 @@ test('element() returns a new puzzle piece as html element', function(t) {
   t.end();
 });
 
-test('onCell() moves a puzzle piece on a cell', function(t) {
+test('puzzlePiece.onCell() moves a puzzle piece on a cell', function(t) {
   let cell   = {row: 0, col: 0, width: 100, height: 100, x: 0, y: 0};
   let item   = {position: 0, bgX: 0, bgY: 0};
   let piece  = puzzlePiece.element(cell, item, IMAGE_PATH);
@@ -36,7 +36,7 @@ test('onCell() moves a puzzle piece on a cell', function(t) {
   t.end();
 });
 
-test('addTo() adds a puzzle piece to image', function(t) {
+test('puzzlePiece.addTo() adds a puzzle piece to image', function(t) {
   t.plan(1);
 
   imageHelper('puzzle-piece1', function() {
@@ -56,7 +56,7 @@ test('addTo() adds a puzzle piece to image', function(t) {
   t.timeoutAfter(10 * 1000);
 });
 
-test('list() returns the puzzle piece elements in container', function(t) {
+test('puzzlePiece.list() returns the puzzle piece elements in container', function(t) {
   t.plan(1);
 
   imageHelper('puzzle-piece2', function() {
@@ -83,13 +83,13 @@ test('list() returns the puzzle piece elements in container', function(t) {
   t.timeoutAfter(10 * 1000);
 });
 
-test('removeAll() removes all elements in container', function(t) {
+test('puzzlePiece.removeAll() removes all elements in container', function(t) {
   t.plan(2);
 
   imageHelper('puzzle-piece2', function() {
     let image = this;
 
-    t.ok(puzzlePiece.removeAll(image), expect, 'removeAll() should return true');
+    t.ok(puzzlePiece.removeAll(image), 'removeAll() should return true');
 
     let actual = puzzlePiece.list(image).length;
     let expect = 0;
