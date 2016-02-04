@@ -10,7 +10,7 @@ import {default as collection, random} from '../lib/collection';
 
 // Tests
 // -----
-test('collection() returns a collection of items', function(t) {
+test('collection.collection() returns a collection of items', function(t) {
   let w      = 200;
   let h      = 200;
   let rows   = 2;
@@ -29,7 +29,7 @@ test('collection() returns a collection of items', function(t) {
   t.end();
 });
 
-test('random() return a random collection of items', function(t) {
+test('collection.random() return a random collection of items', function(t) {
   let w          = 100;
   let h          = 100;
   let rows       = 10;
