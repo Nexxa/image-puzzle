@@ -6,18 +6,15 @@
 // Imports
 // -------
 import test from 'tape';
+import imageHelper from './helpers/image';
 import imagePuzzle from '../../index';
-
-// Constants
-// ---------
-const IMAGE_PATH = 'http://i.telegraph.co.uk/multimedia/archive/02792/mountCook2_2792612b.jpg';
 
 // Tests
 // -----
 test('imagePuzzle() returns a new Image Puzzle object', function(t) {
   t.plan(2);
 
-  testImage('image1', function() {
+  imageHelper('image-puzzle1', function() {
     let image = this;
     let puzzle = imagePuzzle(image);
     let actual = puzzle.config;
@@ -33,7 +30,7 @@ test('imagePuzzle() returns a new Image Puzzle object', function(t) {
 test('imagePuzzle() with specified configuration', function(t) {
   t.plan(1);
 
-  testImage('image2', function() {
+  imageHelper('image-puzzle2', function() {
     let image  = this;
     let data   = [
       [{row:0, col:0, width:100, height:100, x:0, y:0},{position:0, bgX:0, bgY:0}],
@@ -55,7 +52,7 @@ test('imagePuzzle() with specified configuration', function(t) {
 test('imagePuzzle.state() gets the game state', function(t) {
   t.plan(2);
 
-  testImage('image3', function() {
+  imageHelper('image-puzzle3', function() {
     let image  = this;
     let data   = [
       [{row:0, col:0, width:100, height:100, x:0, y:0},{position:0, bgX:0, bgY:0}],
@@ -78,28 +75,3 @@ test('imagePuzzle.state() gets the game state', function(t) {
 
   t.timeoutAfter(10 * 1000);
 });
-
-
-// Private methods
-// ---------------
-/**
- * Creates the image on which run the tests.
- * @private
- * @param  {string}   id - Image id
- * @param  {function} cb - Callback on image load
- */
-function testImage(id, cb) {
-  let image = document.getElementById(id);
-
-  if (image) {
-    return cb.call(image);
-  }
-
-  let container = document.body.appendChild(document.createElement('div'));
-  image         = document.createElement('img');
-  image.id      = id;
-  image.src     = IMAGE_PATH;
-  image.onload  = cb;
-
-  return container.appendChild(image);
-}
