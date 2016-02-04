@@ -6,12 +6,9 @@
 // Imports
 // -------
 import test from 'tape';
+import {default as imageHelper, IMAGE_PATH} from './helpers/image';
 import puzzlePiece from '../../lib/puzzle-piece';
 import {ELEMENT_TYPE, CSS_CLASS} from '../../lib/puzzle-piece';
-
-// Constants
-// ---------
-const IMAGE_PATH = 'http://i.telegraph.co.uk/multimedia/archive/02792/mountCook2_2792612b.jpg';
 
 // Tests
 // -----
@@ -42,7 +39,7 @@ test('onCell() moves a puzzle piece on a cell', function(t) {
 test('addTo() adds a puzzle piece to image', function(t) {
   t.plan(1);
 
-  testImage(function() {
+  imageHelper('puzzle-piece1', function() {
     let image  = this;
     let cell   = {row: 0, col: 0, width: 100, height: 100, x: 0, y: 0};
     let item   = {position: 0, bgX: 0, bgY: 0};
@@ -62,7 +59,7 @@ test('addTo() adds a puzzle piece to image', function(t) {
 test('list() returns the puzzle piece elements in container', function(t) {
   t.plan(1);
 
-  testImage(function() {
+  imageHelper('puzzle-piece2', function() {
     let image = this;
     let pairs = [
       [{row: 0, col: 0, width: 100, height: 100, x: 0, y: 0},{row: 0, col: 1, width: 100, height: 100, x: 100, y: 0}],
@@ -85,20 +82,3 @@ test('list() returns the puzzle piece elements in container', function(t) {
 
   t.timeoutAfter(10 * 1000);
 });
-
-// Private methods
-// ---------------
-/**
- * Creates the image on which run the tests.
- * @private
- * @param  {function} cb - Callback on image load
- * @return {undefined}
- */
-function testImage(cb) {
-  let container = document.body.appendChild(document.createElement('div'));
-  let image     = document.createElement('img');
-  image.src     = IMAGE_PATH;
-  image.onload  = cb;
-
-  return container.appendChild(image);
-}
