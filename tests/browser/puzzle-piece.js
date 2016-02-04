@@ -82,3 +82,19 @@ test('list() returns the puzzle piece elements in container', function(t) {
 
   t.timeoutAfter(10 * 1000);
 });
+
+test('removeAll() removes all elements in container', function(t) {
+  t.plan(2);
+
+  imageHelper('puzzle-piece2', function() {
+    let image = this;
+
+    t.ok(puzzlePiece.removeAll(image), expect, 'removeAll() should return true');
+
+    let actual = puzzlePiece.list(image).length;
+    let expect = 0;
+    t.equal(actual, expect, 'list() should be empty');
+  });
+
+  t.timeoutAfter(10 * 1000);
+});
