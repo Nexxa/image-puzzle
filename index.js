@@ -21,7 +21,7 @@ export default imagePuzzle;
 export const DEFAULTS = {
   image: null,
   rows : 3,
-  cols : 2,
+  cols : 3,
   data : null
 };
 
