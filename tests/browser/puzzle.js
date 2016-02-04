@@ -1,5 +1,5 @@
 /**
- * @file Render module - tests
+ * @file Puzzle module - tests
  * @author StefanoMagrassi <stefano.magrassi@gmail.com>
  */
 
@@ -10,6 +10,7 @@ import puzzle from '../../lib/puzzle';
 
 // Constants
 // ---------
+const IMAGE_ID   = 'img-puzzle_img';
 const IMAGE_PATH = 'http://i.telegraph.co.uk/multimedia/archive/02792/mountCook2_2792612b.jpg';
 
 // Tests
@@ -17,7 +18,7 @@ const IMAGE_PATH = 'http://i.telegraph.co.uk/multimedia/archive/02792/mountCook2
 test('run() returns the collection of image pieces', function(t) {
   t.plan(1);
 
-  testImage(function() {
+  testImage(IMAGE_ID, function() {
     let image    = this;
     let rows     = 10;
     let cols     = 10;
@@ -41,7 +42,7 @@ test('run() with existent data', function(t) {
     [{row:1, col:1, width:100, height:100, x:-100, y:-100},{position:3, bgX:-100, bgY:-100}]
   ];
 
-  testImage(function() {
+  testImage(IMAGE_ID, function() {
     let image  = this;
     let rows   = 2;
     let cols   = 2;
@@ -56,7 +57,7 @@ test('run() with existent data', function(t) {
 test('update() refresh puzzle pieces', function(t) {
   t.plan(1);
 
-  testImage(function() {
+  testImage(IMAGE_ID, function() {
     let image = this;
 
     t.ok(puzzle.update(image), 'should not have errors');
@@ -90,13 +91,11 @@ test('last() gets or sets the last computed collection', function(t) {
 /**
  * Creates the image on which run the tests.
  * @private
+ * @param  {string}   id - Image id
  * @param  {function} cb - Callback on image load
- * @return {undefined}
  */
-function testImage(cb) {
-  const ID         = 'img-puzzle_img';
-
-  let image = document.getElementById(ID);
+function testImage(id, cb) {
+  let image = document.getElementById(id);
 
   if (image) {
     return cb.call(image);
@@ -104,7 +103,7 @@ function testImage(cb) {
 
   let container = document.body.appendChild(document.createElement('div'));
   image         = document.createElement('img');
-  image.id      = ID;
+  image.id      = id;
   image.src     = IMAGE_PATH;
   image.onload  = cb;
 
