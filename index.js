@@ -15,15 +15,15 @@ export default imagePuzzle;
 // Constants
 // ---------
 /**
- * @constant {number} DEFAULT_ROWS - Default number of rows
+ * @constant {object} DEFAULTS - Default configurations
  * @public
  */
-export const DEFAULT_ROWS = 3;
-/**
- * @constant {number} DEFAULT_COLS - Default number of columns
- * @public
- */
-export const DEFAULT_COLS = 3;
+export const DEFAULTS = {
+  image: null,
+  rows : 3,
+  cols : 2,
+  data : null
+};
 
 // Public methods
 // --------------
@@ -46,7 +46,7 @@ function imagePuzzle(image = null, opts) {
     return null;
   }
 
-  return start(config({image: image}, opts));
+  return start(config(DEFAULTS, {image: image}, opts));
 }
 
 /**
@@ -88,12 +88,7 @@ function state(asString = false) {
  * @property {object} config - Default configuration.
  * @private
  */
-let _config = {
-  image: null,
-  rows : DEFAULT_ROWS,
-  cols : DEFAULT_COLS,
-  data : null
-};
+let _config = {};
 
 // Private methods
 // ---------------
