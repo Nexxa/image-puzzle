@@ -75,3 +75,18 @@ test('imagePuzzle.state() gets the game state', function(t) {
 
   t.timeoutAfter(10 * 1000);
 });
+
+// test('imagePuzzle.rebuild() generates a new grid with different rows and cols', function(t) {
+//   t.plan(1);
+//
+//   imageHelper('image-puzzle4', function() {
+//     let image  = this;
+//     let puzzle = imagePuzzle(image).rebuild(6, 6);
+//     let actual = [puzzle.config.rows, puzzle.config.cols];
+//     let expect = [6, 6];
+//
+//     t.deepEqual(actual, expect, 'rebuild() should create a new grid');
+//   });
+//
+//   t.timeoutAfter(10 * 1000);
+// });

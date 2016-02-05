@@ -11,7 +11,7 @@ import puzzle from '../../lib/puzzle';
 
 // Tests
 // -----
-test('run() returns the collection of image pieces', function(t) {
+test('puzzle.run() returns the collection of image pieces', function(t) {
   t.plan(1);
 
   imageHelper('puzzle1', function() {
@@ -28,7 +28,7 @@ test('run() returns the collection of image pieces', function(t) {
   t.timeoutAfter(10 * 1000);
 });
 
-test('run() with existent data', function(t) {
+test('puzzle.run() with existent data', function(t) {
   t.plan(1);
 
   let data = [
@@ -50,7 +50,7 @@ test('run() with existent data', function(t) {
   t.timeoutAfter(10 * 1000);
 });
 
-test('update() refresh puzzle pieces', function(t) {
+test('puzzle.update() refresh puzzle pieces', function(t) {
   t.plan(1);
 
   imageHelper('puzzle2', function() {
@@ -62,7 +62,7 @@ test('update() refresh puzzle pieces', function(t) {
   t.timeoutAfter(10 * 1000);
 });
 
-test('last() gets or sets the last computed collection', function(t) {
+test('puzzle.last() gets or sets the last computed collection', function(t) {
   let data = [
     [{row:0, col:0, width:100, height:100, x:0, y:0},{position:0, bgX:0, bgY:0}],
     [{row:0, col:1, width:100, height:100, x:100, y:0},{position:1, bgX:-100, bgY:0}],

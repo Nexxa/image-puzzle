@@ -22,19 +22,10 @@ function run() {
   let image  = document.getElementById(IMG_ID);
   let puzzle = imagePuzzle(image, config());
 
-  click(UPDATE_BTN_ID, () => puzzle.update());
-
-  click(BUILD_33_BTN_ID, function() {
-    clean(image.parentNode);
-    puzzle = imagePuzzle(image, {rows: 3, cols: 3});
-  });
-
-  click(BUILD_66_BTN_ID, function() {
-    clean(image.parentNode);
-    puzzle = imagePuzzle(image, {rows: 6, cols: 6});
-  });
-
-  click(SAVE_BTN_ID, () => save(puzzle.state(true)));
+  click(UPDATE_BTN_ID,   () => puzzle.update());
+  click(BUILD_33_BTN_ID, () => puzzle.rebuild(3, 3));
+  click(BUILD_66_BTN_ID, () => puzzle.rebuild(6, 6));
+  click(SAVE_BTN_ID,     () => save(puzzle.state(true)));
 
   return;
 }
@@ -55,10 +46,4 @@ function click(id, cb) {
 
 function save(content) {
   return sessionStorage.setItem(STORAGE_KEY, content);
-}
-
-function clean(node) {
-  Array.prototype.map.call(node.childNodes, (child) => child)
-    .filter((child) => child.className === 'img-puzzle_piece')
-    .forEach((child) => node.removeChild(child));
 }

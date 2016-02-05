@@ -46,7 +46,18 @@ function imagePuzzle(image = null, opts) {
     return null;
   }
 
-  return start(config(DEFAULTS, {image: image}, opts));
+  // Set configuration
+  let configuration = config(DEFAULTS, {image: image}, opts);
+
+  // Public API
+  return {
+    _first : runWith(configuration),
+    config : configuration,
+    update : update,
+    last   : puzzle.last,
+    state  : state,
+    rebuild: rebuild
+  };
 }
 
 /**
@@ -82,10 +93,16 @@ function state(asString = false) {
   return current;
 }
 
+function rebuild(rows, cols) {
+  puzzle.removeFrom(config().image);
+
+  return runWith(config({rows: rows, cols: cols, data: null}));
+}
+
 // Private properties
 // ------------------
 /**
- * @property {object} config - Default configuration.
+ * @property {object} config - Configuration object.
  * @private
  */
 let _config = {};
@@ -107,29 +124,13 @@ function config(...sources) {
 }
 
 /**
- * Creates a new image puzzle object with specified options.
- * @private
- * @param  {object} opts - Options object
- * @return {object} Image puzzle object
- */
-function start(opts) {
-  return {
-    _first : run(opts),
-    config : config(),
-    update : update,
-    last   : puzzle.last,
-    state  : state
-  };
-}
-
-/**
  * Runs the puzzle with specified options.
  * @private
- * @param  {object} opts - Options object
- * @return {function} Partially applied run function
+ * @param  {object} config - Configuration object
+ * @return {array} Collection of cell/item pairs
  */
-function run() {
-  let {image, rows, cols, data} = config();
+function runWith(config) {
+  let {image, rows, cols, data} = config;
 
   return puzzle.run(image, rows, cols, data);
 }
