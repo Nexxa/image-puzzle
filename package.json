@@ -41,7 +41,8 @@
     "start": "npm run serve -- -o"
   },
   "dependencies": {
-    "lodash": "4.0.1"
+    "lodash": "4.0.1",
+    "ramda": "0.19.1"
   },
   "devDependencies": {
     "babel-cli": "6.4.5",
