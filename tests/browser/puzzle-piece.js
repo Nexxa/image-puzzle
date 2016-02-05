@@ -84,12 +84,12 @@ test('puzzlePiece.list() returns the puzzle piece elements in container', functi
 });
 
 test('puzzlePiece.removeAll() removes all elements in container', function(t) {
-  t.plan(2);
+  t.plan(1);
 
   imageHelper('puzzle-piece2', function() {
     let image = this;
 
-    t.ok(puzzlePiece.removeAll(image), 'removeAll() should return true');
+    puzzlePiece.removeAll(image);
 
     let actual = puzzlePiece.list(image).length;
     let expect = 0;
