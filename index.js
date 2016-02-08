@@ -5,7 +5,7 @@
 
 // Imports
 // -------
-import _extend from 'lodash/extend';
+import R from 'ramda';
 import puzzle from './lib/puzzle';
 
 // Exports
@@ -47,7 +47,7 @@ function imagePuzzle(image = null, opts) {
   }
 
   // Set configuration
-  let configuration = config(DEFAULTS, {image: image}, opts);
+  let configuration = config([DEFAULTS, {image: image}, opts]);
 
   // Public API
   return {
@@ -96,7 +96,7 @@ function state(asString = false) {
 function rebuild(rows, cols) {
   puzzle.removeFrom(config().image);
 
-  return runWith(config({rows: rows, cols: cols, data: null}));
+  return runWith(config([{rows: rows, cols: cols, data: null}]));
 }
 
 // Private properties
@@ -112,15 +112,27 @@ let _config = {};
 /**
  * Gets or sets configuration.
  * @private
- * @param  {[...object]} ...sources - Configurations to merge
+ * @param  {array} sources - Configurations to merge
  * @return {object} Configuration object
  */
-function config(...sources) {
+function config(sources = []) {
   if (!sources.length) {
     return _config;
   }
 
-  return _extend(_config, ...sources);
+  _config = mergeConfigWith(sources);
+
+  return _config;
+}
+
+/**
+ * Merges specified sources with config.
+ * @private
+ * @param  {array} sources - Options sources (array of objects) to merge with config
+ * @return {object} New configuration object
+ */
+function mergeConfigWith(sources) {
+  return R.pipe(R.reject(R.isNil), R.concat([_config]), R.mergeAll)(sources);
 }
 
 /**
