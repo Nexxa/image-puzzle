@@ -5,7 +5,7 @@
 
 // Imports
 // -------
-import _extend from 'lodash/extend';
+import R from 'ramda';
 import puzzle from './lib/puzzle';
 
 // Exports
@@ -22,7 +22,7 @@ export const DEFAULTS = {
   image: null,
   rows : 3,
   cols : 3,
-  data : null
+  pairs: null
 };
 
 // Public methods
@@ -33,7 +33,7 @@ export const DEFAULTS = {
  * {
  *   rows: <Number>, // Number of rows - Default 3
  *   cols: <Number>, // Number of columns - Default 3
- *   data: <Array>,  // Data loaded from another source (localStorge, ajax etc) - Default null
+ *   pairs: <Array>  // Data loaded from another source (localStorge, ajax etc) - Default null
  * }
  *
  * @public
@@ -47,56 +47,55 @@ function imagePuzzle(image = null, opts) {
   }
 
   // Set configuration
-  let configuration = config(DEFAULTS, {image: image}, opts);
+  let configuration = config([DEFAULTS, {image: image}, opts]);
 
   // Public API
   return {
-    _first : runWith(configuration),
-    config : configuration,
+    _first : puzzle.run(configuration),
+    config : expConfig,
     update : update,
-    last   : puzzle.last,
     state  : state,
     rebuild: rebuild
   };
+}
+
+function expConfig() {
+  return config();
 }
 
 /**
  * Updates the puzzle pieces.
  * @public
  * @param  {object} opts - Options object
- * @return {function} Partially applied update function
+ * @return {object} Puzzle data object
  */
 function update() {
-  let {image, rows, cols} = config();
-
-  return puzzle.update(image, rows, cols);
+  return puzzle.update(config());
 }
 
 /**
  * Gets the current game state as simple object or JSON string.
- * @private
+ * @public
  * @param  {boolean} asString - If true gets the stringify version of state object
  * @return {[object|string]} Game state object or string -> {rows, cols, data}
  */
 function state(asString = false) {
-  let {rows, cols} = config();
-  let current      = {
-    rows: rows,
-    cols: cols,
-    data: puzzle.last()
-  };
+  let stringify = R.cond([
+    [R.equals(true), () => JSON.stringify],
+    [R.equals(false), () => R.identity]
+  ]);
 
-  if (asString) {
-    return JSON.stringify(current);
-  }
-
-  return current;
+  return R.pipe(R.omit('image'), stringify(asString))(puzzle.last());
 }
 
+/**
+ * Rebuilds the puzzle with specified rows and colums.
+ * @param  {number} rows - Number of rows
+ * @param  {number} cols - Number of columns
+ * @return {object} Puzzle data object
+ */
 function rebuild(rows, cols) {
-  puzzle.removeFrom(config().image);
-
-  return runWith(config({rows: rows, cols: cols, data: null}));
+  return puzzle.update(config([{rows: rows, cols: cols, pairs: null}]));
 }
 
 // Private properties
@@ -112,25 +111,25 @@ let _config = {};
 /**
  * Gets or sets configuration.
  * @private
- * @param  {[...object]} ...sources - Configurations to merge
+ * @param  {array} sources - Configurations to merge
  * @return {object} Configuration object
  */
-function config(...sources) {
+function config(sources = []) {
   if (!sources.length) {
     return _config;
   }
 
-  return _extend(_config, ...sources);
+  _config = mergeConfigWith(sources);
+
+  return _config;
 }
 
 /**
- * Runs the puzzle with specified options.
+ * Merges specified sources with config.
  * @private
- * @param  {object} config - Configuration object
- * @return {array} Collection of cell/item pairs
+ * @param  {array} sources - Options sources (array of objects) to merge with config
+ * @return {object} New configuration object
  */
-function runWith(config) {
-  let {image, rows, cols, data} = config;
-
-  return puzzle.run(image, rows, cols, data);
+function mergeConfigWith(sources) {
+  return R.pipe(R.reject(R.isNil), R.concat([_config]), R.mergeAll)(sources);
 }

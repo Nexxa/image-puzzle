@@ -15,12 +15,14 @@ test('puzzle.run() returns the collection of image pieces', function(t) {
   t.plan(1);
 
   imageHelper('puzzle1', function() {
-    let image    = this;
-    let rows     = 10;
-    let cols     = 10;
-    let rendered = puzzle.run(image, rows, cols);
-    let actual   = rendered.length;
-    let expect   = rows * cols;
+    let data = {
+      image: this,
+      rows : 10,
+      cols : 10
+    };
+    let rendered = puzzle.run(data);
+    let actual   = rendered.pairs.length;
+    let expect   = data.rows * data.cols;
 
     t.equal(actual, expect, 'rendered should be as length as the number of rows and columns');
   });
@@ -31,18 +33,21 @@ test('puzzle.run() returns the collection of image pieces', function(t) {
 test('puzzle.run() with existent data', function(t) {
   t.plan(1);
 
-  let data = [
-    [{row:0, col:0, width:100, height:100, x:0, y:0},{position:0, bgX:0, bgY:0}],
-    [{row:0, col:1, width:100, height:100, x:100, y:0},{position:1, bgX:-100, bgY:0}],
-    [{row:1, col:0, width:100, height:100, x:0, y:-100},{position:2, bgX:0, bgY:-100}],
-    [{row:1, col:1, width:100, height:100, x:-100, y:-100},{position:3, bgX:-100, bgY:-100}]
-  ];
 
   imageHelper('puzzle2', function() {
     let image  = this;
-    let rows   = 2;
-    let cols   = 2;
-    let actual = puzzle.run(image, rows, cols, data);
+    let data = {
+      image: image,
+      rows: 2,
+      cols: 2,
+      pairs: [
+        [{row:0, col:0, width:100, height:100, x:0, y:0},{position:0, bgX:0, bgY:0}],
+        [{row:0, col:1, width:100, height:100, x:100, y:0},{position:1, bgX:-100, bgY:0}],
+        [{row:1, col:0, width:100, height:100, x:0, y:-100},{position:2, bgX:0, bgY:-100}],
+        [{row:1, col:1, width:100, height:100, x:-100, y:-100},{position:3, bgX:-100, bgY:-100}]
+      ]
+    };
+    let actual = puzzle.run(data);
 
     t.deepEqual(actual, data, 'should returns the passed data');
   });
@@ -55,8 +60,9 @@ test('puzzle.update() refresh puzzle pieces', function(t) {
 
   imageHelper('puzzle2', function() {
     let image = this;
+    let data = {image: image};
 
-    t.ok(puzzle.update(image), 'should not have errors');
+    t.ok(puzzle.update(data), 'should not have errors');
   });
 
   t.timeoutAfter(10 * 1000);
