@@ -7,6 +7,7 @@
 // -------
 import R from 'ramda';
 import puzzle from './lib/puzzle';
+import game from './lib/game';
 
 // Exports
 // -------
@@ -49,6 +50,9 @@ function imagePuzzle(image = null, opts) {
   // Set configuration
   let configuration = config([DEFAULTS, {image: image}, opts]);
 
+  // Register subscription
+  game.sub(makeTheMove);
+
   // Public API
   return {
     _first : puzzle.run(configuration),
@@ -59,6 +63,11 @@ function imagePuzzle(image = null, opts) {
   };
 }
 
+/**
+ * Gets config - this is an alias for public API only.
+ * @public
+ * @return {object} Configuration object
+ */
 function expConfig() {
   return config();
 }
@@ -132,4 +141,14 @@ function config(sources = []) {
  */
 function mergeConfigWith(sources) {
   return R.pipe(R.reject(R.isNil), R.concat([_config]), R.mergeAll)(sources);
+}
+
+/**
+ * Makes the move... flipping the two puzzle pieces specified in "move" array.
+ * @private
+ * @param  {array} move - The move
+ * @return {object} Puzzle data object
+ */
+function makeTheMove(move) {
+  return puzzle.flip(...move, puzzle.last());
 }

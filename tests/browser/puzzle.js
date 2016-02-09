@@ -130,7 +130,7 @@ test('puzzle.flip() flips two puzzle pieces', function(t) {
       [{row:1, col:1, width:100, height:100, x:-100, y:-100},{position:3, bgX:-100, bgY:-100}]
     ]
   };
-  let actual = puzzle.flip(data, 1, 3);
+  let actual = puzzle.flip(1, 3, data);
   let expect = {
     image: document.createElement('img'), // Just an empty image
     row  : 2,
