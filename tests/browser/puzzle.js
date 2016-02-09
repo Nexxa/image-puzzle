@@ -117,3 +117,32 @@ test('puzzle.win() checks if game move is winning', function(t) {
 
   t.end();
 });
+
+test('puzzle.flip() flips two puzzle pieces', function(t) {
+  let data = {
+    image: document.createElement('img'), // Just an empty image
+    row  : 2,
+    cols : 2,
+    pairs: [
+      [{row:0, col:0, width:100, height:100, x:0, y:0},{position:0, bgX:0, bgY:0}],
+      [{row:0, col:1, width:100, height:100, x:100, y:0},{position:1, bgX:-100, bgY:0}],
+      [{row:1, col:0, width:100, height:100, x:0, y:-100},{position:2, bgX:0, bgY:-100}],
+      [{row:1, col:1, width:100, height:100, x:-100, y:-100},{position:3, bgX:-100, bgY:-100}]
+    ]
+  };
+  let actual = puzzle.flip(data, 1, 3);
+  let expect = {
+    image: document.createElement('img'), // Just an empty image
+    row  : 2,
+    cols : 2,
+    pairs: [
+      [{row:0, col:0, width:100, height:100, x:0, y:0},{position:0, bgX:0, bgY:0}],
+      [{row:0, col:1, width:100, height:100, x:100, y:0},{position:3, bgX:-100, bgY:-100}],
+      [{row:1, col:0, width:100, height:100, x:0, y:-100},{position:2, bgX:0, bgY:-100}],
+      [{row:1, col:1, width:100, height:100, x:-100, y:-100},{position:1, bgX:-100, bgY:0}]
+    ]
+  };
+
+  t.deepEqual(actual, expect, 'should flip the two items at the specified indexes');
+  t.end();
+});
