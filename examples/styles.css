@@ -61,7 +61,6 @@ body {
   width: 620px;
   height: 387px;
   margin: 0 auto;
-  border: 1px solid #c00;
 }
 
 .img-puzzle_img {
@@ -82,7 +81,6 @@ body {
   display: block;
   position: absolute;
   box-sizing: border-box;
-  border: 1px solid #c00;
   background-repeat: no-repeat;
   z-index: 10;
 }
