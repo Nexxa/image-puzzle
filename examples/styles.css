@@ -1,0 +1,86 @@
+/**
+ * ---------
+ * Cosmetics
+ * ---------
+ */
+body {
+  font: 0.85em Arial, Helvetica, sans-serif;
+}
+
+#wrapper {
+  width: 640px;
+  margin: 0 auto;
+}
+
+.title,
+.subtitle {
+  font-weight: normal;
+}
+
+.title {
+  padding-bottom: 0.5em;
+  border-bottom: 1px solid #31b0d5;
+}
+
+.subtitle {
+  margin-bottom: 5%;
+  padding: 0.5em;
+  border: 2px dashed #4cae4c;
+  font-size: 1em;
+  text-align: center;
+}
+
+.tabs {
+  display: block;
+  width: 100%;
+  margin: 0 0 2.5% 0;
+  padding: 0;
+  list-style: none;
+  text-align: center;
+}
+
+.tabs_item {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+}
+
+.buttons {
+  margin-top: 2.5%;
+  text-align: center;
+}
+
+/**
+ * ----------------------
+ * Puzzle specific styles
+ * ----------------------
+ */
+.img-puzzle {
+  position: relative;
+  overflow: hidden;
+  width: 620px;
+  height: 387px;
+  margin: 0 auto;
+}
+
+.img-puzzle_img {
+  display: block;
+  position: relative;
+  z-index: 1;
+}
+
+.img-puzzle_pieces {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.img-puzzle_pieces_piece {
+  display: block;
+  position: absolute;
+  box-sizing: border-box;
+  background-repeat: no-repeat;
+  z-index: 10;
+}

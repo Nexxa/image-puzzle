@@ -12,7 +12,8 @@ import imagePuzzle from '../index';
 const IMG_ID          = 'img-puzzle_img';
 const UPDATE_BTN_ID   = 'update';
 const BUILD_33_BTN_ID = 'build33';
-const BUILD_66_BTN_ID = 'build66';
+const BUILD_44_BTN_ID = 'build44';
+const BUILD_55_BTN_ID = 'build55';
 const SAVE_BTN_ID     = 'save';
 const STORAGE_KEY     = 'puzzle';
 
@@ -24,7 +25,8 @@ function run() {
 
   click(UPDATE_BTN_ID,   () => puzzle.update());
   click(BUILD_33_BTN_ID, () => puzzle.rebuild(3, 3));
-  click(BUILD_66_BTN_ID, () => puzzle.rebuild(6, 6));
+  click(BUILD_44_BTN_ID, () => puzzle.rebuild(4, 4));
+  click(BUILD_55_BTN_ID, () => puzzle.rebuild(5, 5));
   click(SAVE_BTN_ID,     () => save(puzzle.state(true)));
 
   return;

@@ -21,7 +21,7 @@ test('imagePuzzle() returns a new Image Puzzle object', function(t) {
     let expect = {image: image, rows: 3, cols: 3, pairs: null};
 
     t.ok(puzzle, 'should not have errors');
-    t.deepEqual(actual, expect, 'should use default configurations');
+    t.deepEqual(actual, expect, 'should use default config()s');
   });
 
   t.timeoutAfter(10 * 1000);
