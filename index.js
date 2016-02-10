@@ -7,6 +7,7 @@
 // -------
 import R from 'ramda';
 import puzzle from './lib/puzzle';
+import virtualdom from './lib/virtualdom';
 import game from './lib/game';
 
 // Exports
@@ -48,13 +49,18 @@ function imagePuzzle(image = null, opts) {
   }
 
   // Private properties
+  // ------------------
+  let vdom          = virtualdom();
   let configuration = {};
   let lastRun       = {};
-  let runAndSave    = R.pipe(puzzle.run, last);
-  let updateAndSave = R.pipe(puzzle.update, last);
+  let runAndSave    = R.pipe(puzzle.run, last, R.tap(vdom.render));
+  let updateAndSave = R.pipe(puzzle.update, last, R.tap(vdom.update));
 
+  // Private methods
+  // ---------------
   /**
    * Gets or sets the last puzzle data object.
+   * @private
    * @param  {object} data - Puzzle data object
    * @return {object} Last puzle data object
    */
@@ -69,7 +75,21 @@ function imagePuzzle(image = null, opts) {
   }
 
   /**
+   * Starts Image Puzzle.
+   * @private
+   * @return {object} Puzzle data object
+   */
+  function start() {
+    let data = config([DEFAULTS, {image: image}, opts]);
+
+    return runAndSave(data);
+  }
+
+  // Public methods
+  // --------------
+  /**
    * Gets or sets image puzzle configuration.
+   * @public
    * @param  {array} [sources=[]] - Objects to merge with configuration
    * @return {object} Configuration object
    */
@@ -84,16 +104,6 @@ function imagePuzzle(image = null, opts) {
   }
 
   /**
-   * Starts Image Puzzle.
-   * @return {object} Puzzle data object
-   */
-  function start() {
-    let data = config([DEFAULTS, imageWithId(image), opts]);
-
-    return runAndSave(data);
-  }
-
-  /**
    * Updates the puzzle pieces.
    * @public
    * @param  {object} opts - Options object
@@ -105,6 +115,7 @@ function imagePuzzle(image = null, opts) {
 
   /**
    * Rebuilds the puzzle with specified rows and colums.
+   * @public
    * @param  {number} rows - Number of rows
    * @param  {number} cols - Number of columns
    * @return {object} Puzzle data object
@@ -131,6 +142,7 @@ function imagePuzzle(image = null, opts) {
   game.sub(makeTheMove);
 
   // Public API
+  // ----------
   return {
     _first : start(),
     config : config,
@@ -140,8 +152,11 @@ function imagePuzzle(image = null, opts) {
   };
 }
 
+// Module private properties
+// -------------------------
 /**
  * #curried - JSON stringifies data based on boolean parameter.
+ * @private
  * @return {function}
  */
 let stringyOrNot = R.cond([
@@ -149,14 +164,8 @@ let stringyOrNot = R.cond([
   [R.equals(false), () => R.identity]
 ]);
 
-function imageWithId(image) {
-  if (!image.id) {
-    image.id = 'r_' + Math.round(Math.random() * 1000000);
-  }
-
-  return {image: image};
-}
-
+// Module private methods
+// ----------------------
 /**
  * Merges specified sources with config.
  * @private
