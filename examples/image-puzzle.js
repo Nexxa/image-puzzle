@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', run, false);
 
 function run() {
   let image  = document.getElementById(IMG_ID);
-  let puzzle = imagePuzzle(image, config());
+  let puzzle = imagePuzzle(image, config(), resolution);
 
   click(UPDATE_BTN_ID,   () => puzzle.update());
   click(BUILD_33_BTN_ID, () => puzzle.rebuild(3, 3));
@@ -40,6 +40,10 @@ function config() {
   }
 
   return {rows: 3, cols: 3};
+}
+
+function resolution() {
+  return alert('You win!');
 }
 
 function click(id, cb) {
