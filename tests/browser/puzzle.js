@@ -68,26 +68,6 @@ test('puzzle.update() refresh puzzle pieces', function(t) {
   t.timeoutAfter(10 * 1000);
 });
 
-test('puzzle.last() gets or sets the last computed collection', function(t) {
-  let data = [
-    [{row:0, col:0, width:100, height:100, x:0, y:0},{position:0, bgX:0, bgY:0}],
-    [{row:0, col:1, width:100, height:100, x:100, y:0},{position:1, bgX:-100, bgY:0}],
-    [{row:1, col:0, width:100, height:100, x:0, y:-100},{position:2, bgX:0, bgY:-100}],
-    [{row:1, col:1, width:100, height:100, x:-100, y:-100},{position:3, bgX:-100, bgY:-100}]
-  ];
-  let actual = puzzle.last(data);
-  let expect = [
-    [{row:0, col:0, width:100, height:100, x:0, y:0},{position:0, bgX:0, bgY:0}],
-    [{row:0, col:1, width:100, height:100, x:100, y:0},{position:1, bgX:-100, bgY:0}],
-    [{row:1, col:0, width:100, height:100, x:0, y:-100},{position:2, bgX:0, bgY:-100}],
-    [{row:1, col:1, width:100, height:100, x:-100, y:-100},{position:3, bgX:-100, bgY:-100}]
-  ];
-
-  t.deepEqual(actual, expect, 'should set and returns the last computed collection');
-  t.deepEqual(puzzle.last(), expect, 'should returns the last computed collection');
-  t.end();
-});
-
 test('puzzle.win() checks if game move is winning', function(t) {
   let dataLoose = {
     image: document.createElement('img'), // Just an empty image

@@ -7,12 +7,12 @@
 // -------
 import test from 'tape';
 import imageHelper from './helpers/image';
-import vdom from '../../lib/vdom';
-import {CONTAINER_CLASS} from '../../lib/vdom';
+import virtualdom from '../../lib/virtualdom';
+import {CONTAINER_CLASS} from '../../lib/virtualdom';
 
 // Tests
 // -----
-test('vdom.render() renders a puzzle-pieces tree', function(t) {
+test('virtualdom.render() renders a puzzle-pieces tree', function(t) {
   t.plan(3);
 
   imageHelper('vdom1', function() {
@@ -28,10 +28,11 @@ test('vdom.render() renders a puzzle-pieces tree', function(t) {
         [{row:1, col:1, width:100, height:100, x:-100, y:-100},{position:3, bgX:-100, bgY:-100}]
       ]
     };
+    let vdom     = virtualdom();
     let rendered = vdom.render(data);
 
-    let actual   = rendered.tagName.toLowerCase();
-    let expect   = 'div';
+    let actual = rendered.tagName.toLowerCase();
+    let expect = 'div';
     t.equal(actual, expect, 'tagName should be "div"');
 
     actual = rendered.properties.className;
