@@ -39,10 +39,11 @@ export const DEFAULTS = {
  *
  * @public
  * @param  {HTMLImageElement} [image=null] - Image html element
- * @param  {object}           opts         - Configuration
+ * @param  {object}           [opts]       - Configuration
+ * @param  {function}         [onWin]      - Callback on puzzle resolution
  * @return {object} Image Puzzle object
  */
-function imagePuzzle(image = null, opts) {
+function imagePuzzle(image = null, opts, onResolution) {
   if (image === null) {
     return null;
   }
@@ -65,6 +66,12 @@ function imagePuzzle(image = null, opts) {
    */
   let lastRun = {};
   /**
+   * #curried - Checks pieces sequence and if it is winning calls onResolution callback.
+   * @private
+   * @return {function}
+   */
+  var runResolutionOnWin = R.when(puzzle.win, tapFnOrIdentity(onResolution));
+  /**
    * #curried - Runs the puzzle with, saves last and renders the virtualdom
    * @private
    * @return {function}
@@ -75,13 +82,13 @@ function imagePuzzle(image = null, opts) {
    * @private
    * @return {function}
    */
-  let updateAndSave = R.pipe(puzzle.update, last, R.tap(vdom.update));
+  let updateAndSave = R.pipe(puzzle.update, last, R.tap(vdom.update), runResolutionOnWin);
   /**
    * #curried - Flips two pieces, saves last and updates the virtualdom
    * @private
    * @return {function}
    */
-  let flipAndSave = R.pipe(puzzle.flip, last, R.tap(vdom.update));
+  let flipAndSave = R.pipe(puzzle.flip, last, R.tap(vdom.update), runResolutionOnWin);
 
   // Public API
   // ----------
@@ -195,15 +202,15 @@ let stringyOrNot = R.cond([
   [R.equals(true), () => JSON.stringify],
   [R.equals(false), () => R.identity]
 ]);
-
-// Module private methods
-// ----------------------
 /**
- * Merges specified sources with config.
+ * #curried - Merges specified sources.
  * @private
- * @param  {array} sources - Options sources (array of objects) to merge with config
- * @return {object} New configuration object
+ * @return {object} New object from merged sources.
  */
-function merge(sources) {
-  return R.pipe(R.reject(R.isNil), R.mergeAll)(sources);
-}
+let merge = R.pipe(R.reject(R.isNil), R.mergeAll);
+/**
+ * #curried - Taps function or R.identity if function is undefined.
+ * @private
+ * @return {function}
+ */
+let tapFnOrIdentity = R.compose(R.tap, R.defaultTo(R.identity));
