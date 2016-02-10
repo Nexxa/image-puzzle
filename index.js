@@ -196,14 +196,9 @@ let stringyOrNot = R.cond([
   [R.equals(false), () => R.identity]
 ]);
 
-// Module private methods
-// ----------------------
 /**
- * Merges specified sources with config.
+ * #curried - Merges specified sources.
  * @private
- * @param  {array} sources - Options sources (array of objects) to merge with config
- * @return {object} New configuration object
+ * @return {object} New object from merged sources.
  */
-function merge(sources) {
-  return R.pipe(R.reject(R.isNil), R.mergeAll)(sources);
-}
+let merge = R.pipe(R.reject(R.isNil), R.mergeAll);
