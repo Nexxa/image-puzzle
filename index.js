@@ -8,7 +8,6 @@
 import R from 'ramda';
 import puzzle from './lib/puzzle';
 import virtualdom from './lib/virtualdom';
-import game from './lib/game';
 
 // Exports
 // -------
@@ -50,40 +49,49 @@ function imagePuzzle(image = null, opts) {
 
   // Private properties
   // ------------------
-  let vdom          = virtualdom();
+  /**
+   * @property {object} vdom - Instance of virtualdom.
+   * @private
+   */
+  let vdom = virtualdom({ onSelect: makeTheMove });
+  /**
+   * @property {object} configuration - Holds instance configuration.
+   * @private
+   */
   let configuration = {};
-  let lastRun       = {};
-  let runAndSave    = R.pipe(puzzle.run, last, R.tap(vdom.render));
+  /**
+   * @property {object} lastRun - Holds the last puzzle data object.
+   * @private
+   */
+  let lastRun = {};
+  /**
+   * #curried - Runs the puzzle with, saves last and renders the virtualdom
+   * @private
+   * @return {function}
+   */
+  let runAndSave = R.pipe(puzzle.run, last, R.tap(vdom.render));
+  /**
+   * #curried - Updates the puzzle with data, saves last and updates the virtualdom
+   * @private
+   * @return {function}
+   */
   let updateAndSave = R.pipe(puzzle.update, last, R.tap(vdom.update));
-
-  // Private methods
-  // ---------------
   /**
-   * Gets or sets the last puzzle data object.
+   * #curried - Flips two pieces, saves last and updates the virtualdom
    * @private
-   * @param  {object} data - Puzzle data object
-   * @return {object} Last puzle data object
+   * @return {function}
    */
-  function last(data) {
-    if (typeof data === 'undefined') {
-      return lastRun;
-    }
+  let flipAndSave = R.pipe(puzzle.flip, last, R.tap(vdom.update));
 
-    lastRun = data;
-
-    return lastRun;
-  }
-
-  /**
-   * Starts Image Puzzle.
-   * @private
-   * @return {object} Puzzle data object
-   */
-  function start() {
-    let data = config([DEFAULTS, {image: image}, opts]);
-
-    return runAndSave(data);
-  }
+  // Public API
+  // ----------
+  return {
+    _first : start(),
+    config : config,
+    update : update,
+    state  : state,
+    rebuild: rebuild
+  };
 
   // Public methods
   // --------------
@@ -138,18 +146,42 @@ function imagePuzzle(image = null, opts) {
     return R.pipe(R.omit('image'), stringyfied)(last());
   }
 
-  // Register subscriptionthis.configuration
-  game.sub(makeTheMove);
+  // Private methods
+  // ---------------
+  /**
+   * Gets or sets the last puzzle data object.
+   * @private
+   * @param  {object} data - Puzzle data object
+   * @return {object} Last puzle data object
+   */
+  function last(data) {
+    if (typeof data === 'undefined') {
+      return lastRun;
+    }
 
-  // Public API
-  // ----------
-  return {
-    _first : start(),
-    config : config,
-    update : update,
-    state  : state,
-    rebuild: rebuild
-  };
+    return lastRun = data;
+  }
+
+  /**
+   * Starts Image Puzzle.
+   * @private
+   * @return {object} Puzzle data object
+   */
+  function start() {
+    let data = config([DEFAULTS, {image: image}, opts]);
+
+    return runAndSave(data);
+  }
+
+  /**
+   * Makes the move... flipping the two puzzle pieces specified in "move" array.
+   * @private
+   * @param  {array} move - The move
+   * @return {object} Puzzle data object
+   */
+  function makeTheMove(move) {
+    return flipAndSave(...move, last());
+  }
 }
 
 // Module private properties
@@ -174,14 +206,4 @@ let stringyOrNot = R.cond([
  */
 function merge(sources) {
   return R.pipe(R.reject(R.isNil), R.mergeAll)(sources);
-}
-
-/**
- * Makes the move... flipping the two puzzle pieces specified in "move" array.
- * @private
- * @param  {array} move - The move
- * @return {object} Puzzle data object
- */
-function makeTheMove(move) {
-  return puzzle.flip(...move, puzzle.last());
 }
