@@ -47,16 +47,93 @@ function imagePuzzle(image = null, opts) {
     return null;
   }
 
-  // Set configuration
-  let configuration = config([DEFAULTS, {image: image}, opts]);
+  // Private properties
+  let configuration = {};
+  let lastRun       = {};
+  let runAndSave    = R.pipe(puzzle.run, last);
+  let updateAndSave = R.pipe(puzzle.update, last);
 
-  // Register subscription
+  /**
+   * Gets or sets the last puzzle data object.
+   * @param  {object} data - Puzzle data object
+   * @return {object} Last puzle data object
+   */
+  function last(data) {
+    if (typeof data === 'undefined') {
+      return lastRun;
+    }
+
+    lastRun = data;
+
+    return lastRun;
+  }
+
+  /**
+   * Gets or sets image puzzle configuration.
+   * @param  {array} [sources=[]] - Objects to merge with configuration
+   * @return {object} Configuration object
+   */
+  function config(sources = []) {
+    if (!sources.length) {
+      return configuration;
+    }
+
+    configuration = merge(R.concat([configuration], sources));
+
+    return configuration;
+  }
+
+  /**
+   * Starts Image Puzzle.
+   * @return {object} Puzzle data object
+   */
+  function start() {
+    let data = config([DEFAULTS, imageWithId(image), opts]);
+
+    return runAndSave(data);
+  }
+
+  /**
+   * Updates the puzzle pieces.
+   * @public
+   * @param  {object} opts - Options object
+   * @return {object} Puzzle data object
+   */
+  function update() {
+    return updateAndSave(config());
+  }
+
+  /**
+   * Rebuilds the puzzle with specified rows and colums.
+   * @param  {number} rows - Number of rows
+   * @param  {number} cols - Number of columns
+   * @return {object} Puzzle data object
+   */
+  function rebuild(rows, cols) {
+    let data = {rows: rows, cols: cols, pairs: null};
+
+    return updateAndSave(config([data]));
+  }
+
+  /**
+   * Gets the current game state as simple object or JSON string.
+   * @public
+   * @param  {boolean} asString - If true gets the stringify version of state object
+   * @return {[object|string]} Game state object or string -> {rows, cols, data}
+   */
+  function state(asString = false) {
+    let stringyfied = stringyOrNot(asString);
+
+    return R.pipe(R.omit('image'), stringyfied)(last());
+  }
+
+  // Register subscriptionthis.configuration
   game.sub(makeTheMove);
 
   // Public API
   return {
-    _first : puzzle.run(configuration),
-    config : expConfig,
+    _first : start(),
+    config : config,
     update : update,
     state  : state,
     rebuild: rebuild
@@ -64,73 +141,20 @@ function imagePuzzle(image = null, opts) {
 }
 
 /**
- * Gets config - this is an alias for public API only.
- * @public
- * @return {object} Configuration object
+ * #curried - JSON stringifies data based on boolean parameter.
+ * @return {function}
  */
-function expConfig() {
-  return config();
-}
+let stringyOrNot = R.cond([
+  [R.equals(true), () => JSON.stringify],
+  [R.equals(false), () => R.identity]
+]);
 
-/**
- * Updates the puzzle pieces.
- * @public
- * @param  {object} opts - Options object
- * @return {object} Puzzle data object
- */
-function update() {
-  return puzzle.update(config());
-}
-
-/**
- * Gets the current game state as simple object or JSON string.
- * @public
- * @param  {boolean} asString - If true gets the stringify version of state object
- * @return {[object|string]} Game state object or string -> {rows, cols, data}
- */
-function state(asString = false) {
-  let stringify = R.cond([
-    [R.equals(true), () => JSON.stringify],
-    [R.equals(false), () => R.identity]
-  ]);
-
-  return R.pipe(R.omit('image'), stringify(asString))(puzzle.last());
-}
-
-/**
- * Rebuilds the puzzle with specified rows and colums.
- * @param  {number} rows - Number of rows
- * @param  {number} cols - Number of columns
- * @return {object} Puzzle data object
- */
-function rebuild(rows, cols) {
-  return puzzle.update(config([{rows: rows, cols: cols, pairs: null}]));
-}
-
-// Private properties
-// ------------------
-/**
- * @property {object} config - Configuration object.
- * @private
- */
-let _config = {};
-
-// Private methods
-// ---------------
-/**
- * Gets or sets configuration.
- * @private
- * @param  {array} sources - Configurations to merge
- * @return {object} Configuration object
- */
-function config(sources = []) {
-  if (!sources.length) {
-    return _config;
+function imageWithId(image) {
+  if (!image.id) {
+    image.id = 'r_' + Math.round(Math.random() * 1000000);
   }
 
-  _config = mergeConfigWith(sources);
-
-  return _config;
+  return {image: image};
 }
 
 /**
@@ -139,8 +163,8 @@ function config(sources = []) {
  * @param  {array} sources - Options sources (array of objects) to merge with config
  * @return {object} New configuration object
  */
-function mergeConfigWith(sources) {
-  return R.pipe(R.reject(R.isNil), R.concat([_config]), R.mergeAll)(sources);
+function merge(sources) {
+  return R.pipe(R.reject(R.isNil), R.mergeAll)(sources);
 }
 
 /**
