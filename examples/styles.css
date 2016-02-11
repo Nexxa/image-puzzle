@@ -84,3 +84,7 @@ body {
   background-repeat: no-repeat;
   z-index: 10;
 }
+
+.img-puzzle_pieces_piece.is-selected {
+  border: 1px solid #c00;
+}
