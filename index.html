@@ -4,24 +4,51 @@
     <meta charset="UTF-8">
     <title>image-puzzle by Nexxa</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+
+    <!-- Fonts -->
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+
+    <!-- Styles -->
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/image-puzzle.css" media="screen">
   </head>
   <body>
+    <!-- Header -->
     <section class="page-header">
       <h1 class="project-name">image-puzzle</h1>
       <h2 class="project-tagline">Javascript random image puzzle</h2>
+
       <a href="https://github.com/Nexxa/image-puzzle" class="btn">View on GitHub</a>
       <a href="https://github.com/Nexxa/image-puzzle/zipball/master" class="btn">Download .zip</a>
       <a href="https://github.com/Nexxa/image-puzzle/tarball/master" class="btn">Download .tar.gz</a>
     </section>
 
+    <!-- Content -->
     <section class="main-content">
-      <h3>
-<a id="image-puzzle" class="anchor" href="#image-puzzle" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>image-puzzle.</h3>
 
+      <!-- Example -->
+      <section id="wrapper">
+        <h2 class="subtitle">Click on puzzle pieces to move them</h2>
+
+        <div class="rebuilds">
+          <button type="button" id="build33" class="btn tabs_btn">3 x 3 puzzle</button>
+          <button type="button" id="build44" class="btn tabs_btn">4 x 4 puzzle</button>
+          <button type="button" id="build55" class="btn tabs_btn">5 x 5 puzzle</button>
+        </div>
+
+        <div id="img-puzzle" class="img-puzzle">
+          <img src="images/mountain.jpg" alt="image" id="img-puzzle_img" class="img-puzzle_img">
+        </div>
+
+        <div class="buttons">
+          <button type="button" class="btn tabs_btn" id="update">Update</button>
+          <button type="button" class="btn tabs_btn" id="save">Save</button>
+        </div>
+      </section>
+
+      <!-- Footer -->
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/Nexxa/image-puzzle">image-puzzle</a> is maintained by <a href="https://github.com/Nexxa">Nexxa</a>.</span>
 
@@ -30,6 +57,7 @@
 
     </section>
 
-  
+    <!-- Script -->
+    <script src="scripts/image-puzzle.bundle.min.js"></script>
   </body>
 </html>

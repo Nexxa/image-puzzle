@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "uglify-js": "^2.6.1"
+  },
+  "scripts": {
+    "uglify": "uglifyjs ./scripts/image-puzzle.bundle.js -mc -o ./scripts/image-puzzle.bundle.min.js"
+  }
+}
