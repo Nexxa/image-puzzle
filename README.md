@@ -1,18 +1,22 @@
 # image-puzzle [![Build Status](https://travis-ci.org/Nexxa/image-puzzle.svg)](https://travis-ci.org/Nexxa/image-puzzle)
 Javascript image puzzle game.
 
+**image-puzzle** uses [Ramda](http://ramdajs.com/) for functional programming stuff and [virtual-dom](https://github.com/Matt-Esch/virtual-dom) for rendering.
+
+**Disclaimer:** the module is fully written with ES6 syntax and there isn't an already ES5-transpiled version.
+
 ## API
 
 ### `imagePuzzle(image, [opts, onResolution])`
-
-Creates a new Image Puzzle object.
-
-```
-@param  {HTMLImageElement} [image=null]   - Image html element
-@param  {object}           [opts]         - Configuration
-@param  {function}         [onResolution] - Callback on puzzle resolution
-
-@return {object} Image Puzzle object
+```javascript
+/**
+ * Creates a new Image Puzzle object.
+ *
+ * @param  {HTMLImageElement} [image=null]   - Image html element
+ * @param  {object}           [opts]         - Configuration
+ * @param  {function}         [onResolution] - Callback on puzzle resolution
+ * @return {object} Image Puzzle object
+ */
 ```
 Configuration object:
 ```javascript
@@ -23,42 +27,44 @@ Configuration object:
 }
 ```
 
-#### `imagePuzzle._first`
-Puzzle first run data
-
 #### `imagePuzzle.config([sources])`
-Gets or sets image puzzle configuration.
-
-```
-@param  {array} [sources=[]] - Objects to merge with configuration
-
-@return {object} Configuration object
+```javascript
+/**
+ * Gets or sets image puzzle configuration.
+ *
+ * @param  {array} [sources=[]] - Objects to merge with configuration
+ * @return {object} Configuration object
+ */
 ```
 
 #### `imagePuzzle.update()`
-Updates the puzzle pieces.
-
-```
-@return {object} Puzzle data object
+```javascript
+/**
+* Updates the puzzle pieces.
+*
+* @return {object} Puzzle data object
+*/
 ```
 
 #### `imagePuzzle.state([asString])`
-Gets the current game state as simple object or JSON string.
-
-```
-@param  {boolean} [asString=false] - If true gets the stringify version of state object
-
-@return {[object|string]} Game state object or string -> {rows, cols, data}
+```javascript
+/**
+* Gets the current game state as simple object or JSON string.
+*
+* @param  {boolean} [asString=false] - If true gets the stringify version of state object
+* @return {[object|string]} Game state object or string -> {rows, cols, data}
+*/
 ```
 
 #### `imagePuzzle.rebuild(rows, cols)`
-Rebuilds the puzzle with specified rows and colums.
-
-```
-@param  {number} rows - Number of rows
-@param  {number} cols - Number of columns
-
-@return {object} Puzzle data object
+```javascript
+/**
+ * Rebuilds the puzzle with specified rows and colums.
+ *
+ * @param  {number} rows - Number of rows
+ * @param  {number} cols - Number of columns
+ * @return {object} Puzzle data object
+ */
 ```
 
 ## Quick start
