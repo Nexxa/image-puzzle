@@ -1,6 +1,6 @@
 {
   "name": "image-puzzle",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "main": "index.js",
   "description": "Javascript random image puzzle",
   "author": "StefanoMagrassi <stefano.magrassi@gmail.com>",
@@ -18,20 +18,32 @@
   "bugs": {
     "url": "https://github.com/Nexxa/image-puzzle/issues"
   },
+  "engines": [
+    {
+      "node": ">=0.12"
+    }
+  ],
+  "config": {
+    "babelify": "-t babelify",
+    "build_output": "./examples/image-puzzle.js -o ./examples/bundle.js"
+  },
   "scripts": {
+    "clean": "rimraf ./examples/bundle.js",
     "lint": "eslint index.js ./lib/.",
     "pretest": "npm run lint",
-    "test": "babel-tape-runner ./tests/*.js | tap-spec",
-    "build": "browserify -d index.js -o ./build/image-puzzle.js",
-    "watch": "watchify -dv -t babelify index.js -o ./build/image-puzzle.js",
+    "test:js": "babel-tape-runner ./tests/*.js | tap-spec",
+    "test:browser": "browserify $npm_package_config_babelify ./tests/browser/*.js | tape-run --render=\"tap-spec\"",
+    "test": "npm run test:js && npm run test:browser",
+    "example": "browserify -d $npm_package_config_babelify $npm_package_config_build_output",
+    "watch": "watchify -dv $npm_package_config_babelify $npm_package_config_build_output",
+    "preserve": "npm run clean && npm run example",
     "serve": "http-server ./",
     "start": "npm run serve -- -o"
   },
-  "browserify": {
-    "transform": ["babelify"]
-  },
   "dependencies": {
-    "lodash": "4.0.1"
+    "ramda": "0.19.1",
+    "shuffle-array": "0.1.2",
+    "virtual-dom": "2.1.1"
   },
   "devDependencies": {
     "babel-cli": "6.4.5",
@@ -45,10 +57,13 @@
     "babel-preset-es2015": "6.3.13",
     "babel-tape-runner": "2.0.0",
     "babelify": "7.2.0",
+    "browserify": "13.0.0",
     "eslint": "1.10.3",
     "http-server": "0.8.5",
+    "rimraf": "2.5.1",
     "tap-spec": "4.1.1",
     "tape": "4.4.0",
+    "tape-run": "2.1.3",
     "watchify": "3.7.0"
   }
 }

@@ -1,89 +1,215 @@
+/**
+ * @file Image Puzzle - puzzle game factory
+ * @author StefanoMagrassi <stefano.magrassi@gmail.com>
+ */
+
 // Imports
 // -------
-import _ from 'lodash';
+import R from 'ramda';
+import puzzle from './lib/puzzle';
+import virtualdom from './lib/virtualdom';
 
-let image = document.getElementById('img-puzzle_img');
+// Exports
+// -------
+export default imagePuzzle;
 
-function render(img, rows, cols) {
-  let imageW = img.width;
-  let imageH = img.height;
-  let pieceW = imageW / cols;
-  let pieceH = imageH / rows;
+// Constants
+// ---------
+/**
+ * @constant {object} DEFAULTS - Default configurations
+ * @public
+ */
+export const DEFAULTS = {
+  image: null,
+  rows : 3,
+  cols : 3,
+  pairs: null
+};
 
-  return pieces(rows, cols, pieceW, pieceH)
-          .forEach(_.partial(addPiece, img.parentNode));
-}
+// Public methods
+// --------------
+/**
+ * Creates a new Image Puzzle object.<br/>
+ * Available configuration:
+ * {
+ *   rows: <Number>, // Number of rows - Default 3
+ *   cols: <Number>, // Number of columns - Default 3
+ *   pairs: <Array>  // Data loaded from another source (localStorge, ajax etc) - Default null
+ * }
+ *
+ * @public
+ * @param  {HTMLImageElement} [image=null]   - Image html element
+ * @param  {object}           [opts]         - Configuration
+ * @param  {function}         [onResolution] - Callback on puzzle resolution
+ * @return {object} Image Puzzle object
+ */
+function imagePuzzle(image = null, opts, onResolution) {
+  if (image === null) {
+    return null;
+  }
 
-function pieces(r, c, w, h) {
-  return _.chain(list(r, c)) // List of all pieces
-          .chunk(c) // Divide in rows based on columns
-          .map(rows) // Add row and index
-          .flatten()
-          .groupBy('row')
-          .transform(rowsWithCols, []) // Add col
-          .flatten()
-          .map(_.partial(withSize, w, h)) // Add sizes
-          .map(withOriPos) // Add original position
-          .value();
-}
+  // Private properties
+  // ------------------
+  /**
+   * @property {object} vdom - Instance of virtualdom.
+   * @private
+   */
+  let vdom = virtualdom({ onSelect: makeTheMove });
+  /**
+   * @property {object} configuration - Holds instance configuration.
+   * @private
+   */
+  let configuration = {};
+  /**
+   * @property {object} lastRun - Holds the last puzzle data object.
+   * @private
+   */
+  let lastRun = {};
+  /**
+   * #curried - Checks pieces sequence and if it is winning calls onResolution callback.
+   * @private
+   * @return {function}
+   */
+  var runResolutionOnWin = R.when(puzzle.win, tapFnOrIdentity(onResolution));
+  /**
+   * #curried - Runs the puzzle with, saves last and renders the virtualdom
+   * @private
+   * @return {function}
+   */
+  let runAndSave = R.pipe(puzzle.run, last, R.tap(vdom.render));
+  /**
+   * #curried - Updates the puzzle with data, saves last and updates the virtualdom
+   * @private
+   * @return {function}
+   */
+  let updateAndSave = R.pipe(puzzle.update, last, R.tap(vdom.update), runResolutionOnWin);
+  /**
+   * #curried - Flips two pieces, saves last and updates the virtualdom
+   * @private
+   * @return {function}
+   */
+  let flipAndSave = R.pipe(puzzle.flip, last, R.tap(vdom.update), runResolutionOnWin);
 
-function list(r, c) {
-  return _.range(1, (r * c) + 1); // shifted by one
-}
-
-function rows(item, index) {
-  return _.map(item, _.partial(withRow, index + 1));
-}
-
-function withRow(r, index) {
+  // Public API
+  // ----------
   return {
-    row: r,
-    index: index
+    _first : start(),
+    config : config,
+    update : update,
+    state  : state,
+    rebuild: rebuild
   };
+
+  // Public methods
+  // --------------
+  /**
+   * Gets or sets image puzzle configuration.
+   * @public
+   * @param  {array} [sources=[]] - Objects to merge with configuration
+   * @return {object} Configuration object
+   */
+  function config(sources = []) {
+    if (!sources.length) {
+      return configuration;
+    }
+
+    configuration = merge(R.concat([configuration], sources));
+
+    return configuration;
+  }
+
+  /**
+   * Updates the puzzle pieces.
+   * @public
+   * @return {object} Puzzle data object
+   */
+  function update() {
+    return updateAndSave(config());
+  }
+
+  /**
+   * Gets the current game state as simple object or JSON string.
+   * @public
+   * @param  {boolean} [asString=false] - If true gets the stringify version of state object
+   * @return {[object|string]} Game state object or string -> {rows, cols, data}
+   */
+  function state(asString = false) {
+    let stringyfied = stringyOrNot(asString);
+
+    return R.pipe(R.omit('image'), stringyfied)(last());
+  }
+
+  /**
+   * Rebuilds the puzzle with specified rows and colums.
+   * @public
+   * @param  {number} rows - Number of rows
+   * @param  {number} cols - Number of columns
+   * @return {object} Puzzle data object
+   */
+  function rebuild(rows, cols) {
+    let data = {rows: rows, cols: cols, pairs: null};
+
+    return updateAndSave(config([data]));
+  }
+
+  // Private methods
+  // ---------------
+  /**
+   * Gets or sets the last puzzle data object.
+   * @private
+   * @param  {object} data - Puzzle data object
+   * @return {object} Last puzle data object
+   */
+  function last(data) {
+    if (typeof data === 'undefined') {
+      return lastRun;
+    }
+
+    return lastRun = data;
+  }
+
+  /**
+   * Starts Image Puzzle.
+   * @private
+   * @return {object} Puzzle data object
+   */
+  function start() {
+    let data = config([DEFAULTS, {image: image}, opts]);
+
+    return runAndSave(data);
+  }
+
+  /**
+   * Makes the move... flipping the two puzzle pieces specified in "move" array.
+   * @private
+   * @param  {array} move - The move
+   * @return {object} Puzzle data object
+   */
+  function makeTheMove(move) {
+    return flipAndSave(...move, last());
+  }
 }
 
-function rowsWithCols(result, group) {
-  result.push(cols(group));
-
-  return result;
-}
-
-function cols(item) {
-  return _.map(item, withCol);
-}
-
-function withCol(item, index) {
-  item.col = index + 1;
-
-  return item;
-}
-
-function withSize(w, h, item) {
-  item.width = w;
-  item.height = h;
-
-  return item;
-}
-
-function withOriPos(item) {
-  item.oriX = (item.width * (item.col - 1));
-  item.oriY = (item.height * (item.row - 1));
-
-  return item;
-}
-
-//console.log(pieces(r, c, pieceW, pieceH));
-
-function addPiece(container, item) {
-  let piece = document.createElement('span');
-  piece.className = 'img-puzzle_piece';
-  piece.innerHTML = item.index;
-  piece.style.width = item.width + 'px';
-  piece.style.height = item.height + 'px';
-  piece.style.left = item.oriX + 'px';
-  piece.style.top = item.oriY + 'px';
-
-  container.appendChild(piece);
-}
-
-render(image, 3, 3);
+// Module private properties
+// -------------------------
+/**
+ * #curried - JSON stringifies data based on boolean parameter.
+ * @private
+ * @return {function}
+ */
+let stringyOrNot = R.cond([
+  [R.equals(true), () => JSON.stringify],
+  [R.equals(false), () => R.identity]
+]);
+/**
+ * #curried - Merges specified sources.
+ * @private
+ * @return {object} New object from merged sources.
+ */
+let merge = R.pipe(R.reject(R.isNil), R.mergeAll);
+/**
+ * #curried - Taps function or R.identity if function is undefined.
+ * @private
+ * @return {function}
+ */
+let tapFnOrIdentity = R.compose(R.tap, R.defaultTo(R.identity));

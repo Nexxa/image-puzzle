@@ -1,45 +1,41 @@
 <!DOCTYPE html>
-
 <html>
   <head>
     <meta name="description" content="Image puzzle test">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
-    <title>JS Bin</title>
-
-    <style>
-      #img-puzzle {
-        position: relative;
-        overflow: hidden;
-        width: 620px;
-        height: 387px;
-        margin: 20% auto;
-        border: 2px solid red;
-      }
-
-      #img-puzzle_img {
-        display: block;
-        position: relative;
-        z-index: 1;
-      }
-
-      .img-puzzle_piece {
-        display: block;
-        position: absolute;
-        box-sizing: border-box;
-        border: 1px solid red;
-        background-repeat: no-repeat;
-        z-index: 10;
-      }
-    </style>
+    <title>Image puzzle example</title>
+    <link rel="stylesheet" href="./styles.css">
   </head>
 
   <body>
-    <div id="img-puzzle">
-      <img src="http://i.telegraph.co.uk/multimedia/archive/02792/mountCook2_2792612b.jpg" alt="image" id="img-puzzle_img">
+    <div id="wrapper">
+      <h1 class="title">Image puzzle</h1>
+      <h2 class="subtitle">Click on puzzle pieces to move them</h2>
+
+      <ul class="tabs">
+        <li class="tabs_item">
+          <button type="button" id="build33" class="tabs_btn">3 x 3 puzzle</button>
+        </li>
+        <li class="tabs_item">
+          <button type="button" id="build44" class="tabs_btn">4 x 4 puzzle</button>
+        </li>
+        <li class="tabs_item">
+          <button type="button" id="build55" class="tabs_btn">5 x 5 puzzle</button>
+        </li>
+      </ul>
+
+      <div id="img-puzzle" class="img-puzzle">
+        <img src="./mountain.jpg" alt="image" id="img-puzzle_img" class="img-puzzle_img">
+      </div>
+
+      <div class="buttons">
+        <button type="button" id="update">Update</button>
+        <button type="button" id="save">Save</button>
+      </div>
     </div>
 
     <!-- Import script -->
-    <script src="../build/image-puzzle.js"></script>
+    <script src="./bundle.js"></script>
   </body>
 </html>
