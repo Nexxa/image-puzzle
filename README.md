@@ -1,5 +1,6 @@
 # image-puzzle [![Build Status](https://travis-ci.org/Nexxa/image-puzzle.svg)](https://travis-ci.org/Nexxa/image-puzzle)
-Javascript image puzzle game.
+
+Javascript image puzzle game. You can find an example [here](http://nexxa.github.io/image-puzzle/).
 
 **image-puzzle** uses [Ramda](http://ramdajs.com/) for functional programming stuff and [virtual-dom](https://github.com/Matt-Esch/virtual-dom) for rendering.
 
