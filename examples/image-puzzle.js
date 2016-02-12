@@ -43,7 +43,7 @@ function config() {
 }
 
 function resolution() {
-  return alert('You win!');
+  return alert('Puzzle resolved!');
 }
 
 function click(id, cb) {

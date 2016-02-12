@@ -38,9 +38,9 @@ export const DEFAULTS = {
  * }
  *
  * @public
- * @param  {HTMLImageElement} [image=null] - Image html element
- * @param  {object}           [opts]       - Configuration
- * @param  {function}         [onWin]      - Callback on puzzle resolution
+ * @param  {HTMLImageElement} [image=null]   - Image html element
+ * @param  {object}           [opts]         - Configuration
+ * @param  {function}         [onResolution] - Callback on puzzle resolution
  * @return {object} Image Puzzle object
  */
 function imagePuzzle(image = null, opts, onResolution) {
@@ -121,11 +121,22 @@ function imagePuzzle(image = null, opts, onResolution) {
   /**
    * Updates the puzzle pieces.
    * @public
-   * @param  {object} opts - Options object
    * @return {object} Puzzle data object
    */
   function update() {
     return updateAndSave(config());
+  }
+
+  /**
+   * Gets the current game state as simple object or JSON string.
+   * @public
+   * @param  {boolean} [asString=false] - If true gets the stringify version of state object
+   * @return {[object|string]} Game state object or string -> {rows, cols, data}
+   */
+  function state(asString = false) {
+    let stringyfied = stringyOrNot(asString);
+
+    return R.pipe(R.omit('image'), stringyfied)(last());
   }
 
   /**
@@ -139,18 +150,6 @@ function imagePuzzle(image = null, opts, onResolution) {
     let data = {rows: rows, cols: cols, pairs: null};
 
     return updateAndSave(config([data]));
-  }
-
-  /**
-   * Gets the current game state as simple object or JSON string.
-   * @public
-   * @param  {boolean} asString - If true gets the stringify version of state object
-   * @return {[object|string]} Game state object or string -> {rows, cols, data}
-   */
-  function state(asString = false) {
-    let stringyfied = stringyOrNot(asString);
-
-    return R.pipe(R.omit('image'), stringyfied)(last());
   }
 
   // Private methods

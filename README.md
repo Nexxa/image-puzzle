@@ -1,5 +1,97 @@
 # image-puzzle [![Build Status](https://travis-ci.org/Nexxa/image-puzzle.svg)](https://travis-ci.org/Nexxa/image-puzzle)
-Javascript random image puzzle game.
+Javascript image puzzle game.
+
+## API
+
+### `imagePuzzle(image, [opts, onResolution])`
+
+Creates a new Image Puzzle object.
+
+```
+@param  {HTMLImageElement} [image=null]   - Image html element
+@param  {object}           [opts]         - Configuration
+@param  {function}         [onResolution] - Callback on puzzle resolution
+
+@return {object} Image Puzzle object
+```
+Configuration object:
+```javascript
+{
+  rows: <Number>, // Number of rows - Default 3
+  cols: <Number>, // Number of columns - Default 3
+  pairs: <Array>  // Data loaded from another source (localStorge, ajax etc) - Default null
+}
+```
+
+#### `imagePuzzle._first`
+Puzzle first run data
+
+#### `imagePuzzle.config([sources])`
+Gets or sets image puzzle configuration.
+
+```
+@param  {array} [sources=[]] - Objects to merge with configuration
+
+@return {object} Configuration object
+```
+
+#### `imagePuzzle.update()`
+Updates the puzzle pieces.
+
+```
+@return {object} Puzzle data object
+```
+
+#### `imagePuzzle.state([asString])`
+Gets the current game state as simple object or JSON string.
+
+```
+@param  {boolean} [asString=false] - If true gets the stringify version of state object
+
+@return {[object|string]} Game state object or string -> {rows, cols, data}
+```
+
+#### `imagePuzzle.rebuild(rows, cols)`
+Rebuilds the puzzle with specified rows and colums.
+
+```
+@param  {number} rows - Number of rows
+@param  {number} cols - Number of columns
+
+@return {object} Puzzle data object
+```
+
+## Quick start
+```html
+<div id="puzzle">
+  <img src="my-image.jpg" alt="image" id="puzzle-img">
+</div>
+
+<button type="button" id="update">Update</button>
+<button type="button" id="rebuild">Rebuild</button>
+<button type="button" id="save">Save</button>
+
+<script>
+// Pick an image
+let image = document.getElementById('puzzle-img');
+
+// Puzzle configuration: 4x4 grid
+let config = {rows: 4, cols: 4};
+// On resolution alert a message
+let resolution = () => alert('Puzzle resolved!');
+// Init puzzle
+let puzzle = imagePuzzle(image, config, resolution);
+
+// Update the puzzle
+document.getElementById('update').addEventListener('click', () => puzzle.update());
+
+// Rebuild the puzzle with a 3x3 grid
+document.getElementById('rebuild').addEventListener('click', () => puzzle.rebuild(3, 3));
+
+// Show in console the current puzzle state as stringify JSON
+document.getElementById('save').addEventListener('click', () => console.log(puzzle.state(true)));
+</scrip>
+```
 
 ## Contributing
 
