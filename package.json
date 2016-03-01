@@ -23,6 +23,9 @@
       "node": ">=0.12"
     }
   ],
+  "browserify": {
+    "transform": ["babelify"]
+  },
   "config": {
     "babelify": "-t babelify",
     "build_output": "./examples/image-puzzle.js -o ./examples/bundle.js"
