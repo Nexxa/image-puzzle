@@ -1,6 +1,6 @@
 {
   "name": "image-puzzle",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "index.js",
   "description": "Javascript random image puzzle",
   "author": "StefanoMagrassi <stefano.magrassi@gmail.com>",
@@ -23,6 +23,11 @@
       "node": ">=0.12"
     }
   ],
+  "browserify": {
+    "transform": [
+      "babelify"
+    ]
+  },
   "config": {
     "babelify": "-t babelify",
     "build_output": "./examples/image-puzzle.js -o ./examples/bundle.js"
