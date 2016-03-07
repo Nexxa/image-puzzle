@@ -1,6 +1,6 @@
 {
   "name": "image-puzzle",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "index.js",
   "description": "Javascript random image puzzle",
   "author": "StefanoMagrassi <stefano.magrassi@gmail.com>",

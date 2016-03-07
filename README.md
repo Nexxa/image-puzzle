@@ -1,10 +1,12 @@
 # image-puzzle [![Build Status](https://travis-ci.org/Nexxa/image-puzzle.svg)](https://travis-ci.org/Nexxa/image-puzzle)
 
-Javascript image puzzle game. You can find an example [here](http://nexxa.github.io/image-puzzle/).
+Javascript image puzzle game.
+
+Check out example [here](http://nexxa.github.io/image-puzzle/).
 
 **image-puzzle** uses [Ramda](http://ramdajs.com/) for functional programming stuff and [virtual-dom](https://github.com/Matt-Esch/virtual-dom) for rendering.
 
-**Disclaimer:** the module is fully written with ES6 syntax and there isn't an already ES5-transpiled version.
+**Disclaimer:** the module is fully written with ES6 syntax and there isn't a "dist" ES5-transpiled version.
 
 ## API
 
@@ -79,25 +81,20 @@ Configuration object:
 <button type="button" id="save">Save</button>
 
 <script>
-// Pick an image
-let image = document.getElementById('puzzle-img');
+  // Pick an image
+  const image = document.getElementById('puzzle-img');
+  // Init puzzle with  4x4 grid and with alert on resolution
+  const puzzle = imagePuzzle(image, {rows: 4, cols: 4}, () => alert('Puzzle resolved!'));
 
-// Puzzle configuration: 4x4 grid
-let config = {rows: 4, cols: 4};
-// On resolution alert a message
-let resolution = () => alert('Puzzle resolved!');
-// Init puzzle
-let puzzle = imagePuzzle(image, config, resolution);
+  // Update the puzzle
+  document.getElementById('update').addEventListener('click', () => puzzle.update());
 
-// Update the puzzle
-document.getElementById('update').addEventListener('click', () => puzzle.update());
+  // Rebuild the puzzle with a 3x3 grid
+  document.getElementById('rebuild').addEventListener('click', () => puzzle.rebuild(3, 3));
 
-// Rebuild the puzzle with a 3x3 grid
-document.getElementById('rebuild').addEventListener('click', () => puzzle.rebuild(3, 3));
-
-// Show in console the current puzzle state as stringify JSON
-document.getElementById('save').addEventListener('click', () => console.log(puzzle.state(true)));
-</scrip>
+  // Show in console the current puzzle state as stringify JSON
+  document.getElementById('save').addEventListener('click', () => console.log(puzzle.state(true)));
+</script>
 ```
 
 ## Contributing
