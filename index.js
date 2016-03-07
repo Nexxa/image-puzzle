@@ -26,7 +26,34 @@ export const DEFAULTS = {
   pairs: null
 };
 
-// Public methods
+/**
+ * @func stringyOrNot - JSON stringifies data based on boolean parameter.
+ * @private
+ * @curried
+ * @return {Function}
+ */
+const stringyOrNot = R.cond([
+  [R.equals(true), () => JSON.stringify],
+  [R.equals(false), () => R.identity]
+]);
+
+/**
+ * @func merge - Merges specified sources.
+ * @private
+ * @curried
+ * @return {Function}
+ */
+const merge = R.pipe(R.reject(R.isNil), R.mergeAll);
+
+/**
+ * @func tapFnOrIdentity - Taps function or R.identity if function is undefined.
+ * @private
+ * @curried
+ * @return {Function}
+ */
+const tapFnOrIdentity = R.compose(R.tap, R.defaultTo(R.identity));
+
+// Instance
 // --------------
 /**
  * Creates a new Image Puzzle object.<br/>
@@ -54,7 +81,7 @@ function imagePuzzle(image = null, opts, onResolution) {
    * @property {object} vdom - Instance of virtualdom.
    * @private
    */
-  let vdom = virtualdom({ onSelect: makeTheMove });
+  const vdom = virtualdom({ onSelect: makeTheMove });
   /**
    * @property {object} configuration - Holds instance configuration.
    * @private
@@ -66,29 +93,33 @@ function imagePuzzle(image = null, opts, onResolution) {
    */
   let lastRun = {};
   /**
-   * #curried - Checks pieces sequence and if it is winning calls onResolution callback.
+   * @func runResolutionOnWin - Checks pieces sequence and if it is winning calls onResolution callback.
    * @private
-   * @return {function}
+   * @curried
+   * @return {Function}
    */
-  var runResolutionOnWin = R.when(puzzle.win, tapFnOrIdentity(onResolution));
+  const runResolutionOnWin = R.when(puzzle.win, tapFnOrIdentity(onResolution));
   /**
-   * #curried - Runs the puzzle with, saves last and renders the virtualdom
+   * @func runAndSave - Runs the puzzle with, saves last and renders the virtualdom
    * @private
-   * @return {function}
+   * @curried
+   * @return {Function}
    */
-  let runAndSave = R.pipe(puzzle.run, last, R.tap(vdom.render));
+  const runAndSave = R.pipe(puzzle.run, last, R.tap(vdom.render));
   /**
-   * #curried - Updates the puzzle with data, saves last and updates the virtualdom
+   * @func updateAndSave - Updates the puzzle with data, saves last and updates the virtualdom
    * @private
-   * @return {function}
+   * @curried
+   * @return {Function}
    */
-  let updateAndSave = R.pipe(puzzle.update, last, R.tap(vdom.update), runResolutionOnWin);
+  const updateAndSave = R.pipe(puzzle.update, last, R.tap(vdom.update), runResolutionOnWin);
   /**
-   * #curried - Flips two pieces, saves last and updates the virtualdom
+   * @func flipAndSave - Flips two pieces, saves last and updates the virtualdom
    * @private
-   * @return {function}
+   * @curried
+   * @return {Function}
    */
-  let flipAndSave = R.pipe(puzzle.flip, last, R.tap(vdom.update), runResolutionOnWin);
+  const flipAndSave = R.pipe(puzzle.flip, last, R.tap(vdom.update), runResolutionOnWin);
 
   // Public API
   // ----------
@@ -134,7 +165,7 @@ function imagePuzzle(image = null, opts, onResolution) {
    * @return {[object|string]} Game state object or string -> {rows, cols, data}
    */
   function state(asString = false) {
-    let stringyfied = stringyOrNot(asString);
+    const stringyfied = stringyOrNot(asString);
 
     return R.pipe(R.omit('image'), stringyfied)(last());
   }
@@ -147,7 +178,7 @@ function imagePuzzle(image = null, opts, onResolution) {
    * @return {object} Puzzle data object
    */
   function rebuild(rows, cols) {
-    let data = {rows: rows, cols: cols, pairs: null};
+    const data = { rows: rows, cols: cols, pairs: null };
 
     return updateAndSave(config([data]));
   }
@@ -174,7 +205,7 @@ function imagePuzzle(image = null, opts, onResolution) {
    * @return {object} Puzzle data object
    */
   function start() {
-    let data = config([DEFAULTS, {image: image}, opts]);
+    const data = config([DEFAULTS, { image: image }, opts]);
 
     return runAndSave(data);
   }
@@ -189,27 +220,3 @@ function imagePuzzle(image = null, opts, onResolution) {
     return flipAndSave(...move, last());
   }
 }
-
-// Module private properties
-// -------------------------
-/**
- * #curried - JSON stringifies data based on boolean parameter.
- * @private
- * @return {function}
- */
-let stringyOrNot = R.cond([
-  [R.equals(true), () => JSON.stringify],
-  [R.equals(false), () => R.identity]
-]);
-/**
- * #curried - Merges specified sources.
- * @private
- * @return {object} New object from merged sources.
- */
-let merge = R.pipe(R.reject(R.isNil), R.mergeAll);
-/**
- * #curried - Taps function or R.identity if function is undefined.
- * @private
- * @return {function}
- */
-let tapFnOrIdentity = R.compose(R.tap, R.defaultTo(R.identity));
