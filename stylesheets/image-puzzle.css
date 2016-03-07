@@ -87,6 +87,14 @@
   z-index: 10;
 }
 
-.img-puzzle_pieces_piece.is-selected {
-  border: 1px solid #c00;
+.img-puzzle_pieces_piece.is-selected:after {
+  display: block;
+  position: absolute;
+  content: "";
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  border: 5px solid #c00;
 }
