@@ -6,6 +6,7 @@
 // Imports
 // -------
 import R from 'ramda';
+import {showEl, hideEl} from './lib/utils';
 import puzzle from './lib/puzzle';
 import virtualdom from './lib/virtualdom';
 
@@ -75,13 +76,6 @@ function imagePuzzle(image = null, opts, onResolution) {
     return null;
   }
 
-  // Private properties
-  // ------------------
-  /**
-   * @property {object} vdom - Instance of virtualdom.
-   * @private
-   */
-  const vdom = virtualdom({ onSelect: makeTheMove });
   /**
    * @property {object} configuration - Holds instance configuration.
    * @private
@@ -92,13 +86,37 @@ function imagePuzzle(image = null, opts, onResolution) {
    * @private
    */
   let lastRun = {};
+
   /**
-   * @func runResolutionOnWin - Checks pieces sequence and if it is winning calls onResolution callback.
+  * @property {object} vdom - Instance of virtualdom.
+  * @private
+  */
+  const vdom = virtualdom({ onSelect: makeTheMove });
+
+  /**
+   * @func showAndClean - Shows image and return null in order to cleans the puzzle.
    * @private
    * @curried
    * @return {Function}
    */
-  const runResolutionOnWin = R.when(puzzle.win, tapFnOrIdentity(onResolution));
+  const showAndClean = R.pipe(R.prop('image'), showEl, R.always(null));
+
+  /**
+   * @func resolveThenShowClean - Run "onResolution" callback and then shows the image and cleans the puzzle.
+   * @private
+   * @curried
+   * @return {Function}
+   */
+  const resolveThenShowClean = R.pipe(tapFnOrIdentity(onResolution), showAndClean);
+
+  /**
+   * @func runResolutionOnWin - Checks pieces sequence and if it is winning runs resolution.
+   * @private
+   * @curried
+   * @return {Function}
+   */
+  const runResolutionOnWin = R.when(puzzle.win, resolveThenShowClean);
+
   /**
    * @func runAndSave - Runs the puzzle with, saves last and renders the virtualdom
    * @private
@@ -106,6 +124,7 @@ function imagePuzzle(image = null, opts, onResolution) {
    * @return {Function}
    */
   const runAndSave = R.pipe(puzzle.run, last, R.tap(vdom.render));
+
   /**
    * @func updateAndSave - Updates the puzzle with data, saves last and updates the virtualdom
    * @private
@@ -113,6 +132,7 @@ function imagePuzzle(image = null, opts, onResolution) {
    * @return {Function}
    */
   const updateAndSave = R.pipe(puzzle.update, last, R.tap(vdom.update), runResolutionOnWin);
+
   /**
    * @func flipAndSave - Flips two pieces, saves last and updates the virtualdom
    * @private
@@ -124,15 +144,13 @@ function imagePuzzle(image = null, opts, onResolution) {
   // Public API
   // ----------
   return {
-    _first : start(),
-    config : config,
-    update : update,
-    state  : state,
-    rebuild: rebuild
+    _first : start(image, opts),
+    config,
+    update,
+    state,
+    rebuild
   };
 
-  // Public methods
-  // --------------
   /**
    * Gets or sets image puzzle configuration.
    * @public
@@ -183,8 +201,6 @@ function imagePuzzle(image = null, opts, onResolution) {
     return updateAndSave(config([data]));
   }
 
-  // Private methods
-  // ---------------
   /**
    * Gets or sets the last puzzle data object.
    * @private
@@ -204,8 +220,8 @@ function imagePuzzle(image = null, opts, onResolution) {
    * @private
    * @return {object} Puzzle data object
    */
-  function start() {
-    const data = config([DEFAULTS, { image: image }, opts]);
+  function start(image, opts) {
+    const data = config([DEFAULTS, { image: hideEl(image) }, opts]);
 
     return runAndSave(data);
   }

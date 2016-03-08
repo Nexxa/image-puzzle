@@ -20,7 +20,7 @@ export default function(id, cb) {
     return cb.call(image);
   }
 
-  let container = document.body.appendChild(document.createElement('div'));
+  const container = document.body.appendChild(document.createElement('div'));
   image         = document.createElement('img');
   image.id      = id;
   image.src     = IMAGE_PATH;

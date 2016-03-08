@@ -9,39 +9,36 @@ import test from 'tape';
 import selectionManager from '../lib/selection';
 import {SELECTED_CLASS, EMPTY, PUZZLE_INDEX} from '../lib/selection';
 
-// Mock object
-// -----------
-let mock   = {};
-let target = {};
-
-target[PUZZLE_INDEX] = 1;
-mock.target = target;
-
 // Tests
-// -----
-test('selectionManager.withIndex() updates selection state', function(t) {
-  let selection = selectionManager();
-  let actual    = selection.withIndex({}, mock);
+test('Lib: selection', t => {
+  // Mock object
+  // -----------
+  const target = {};
+  target[PUZZLE_INDEX] = 1;
 
-  t.ok(actual, 'should update selection without errors');
+  const mock      = {target: target};
+  const selection = selectionManager();
+  const selected  = selection.withIndex({}, mock);
 
-  t.end();
-});
+  t.test('withIndex()', st => {
+    const actual = selected;
 
-test('selectionManager.toggleClass() return css class based on selection', function(t) {
-  let selection = selectionManager();
+    st.ok(actual, 'should update selection without errors');
+    st.end();
+  });
 
-  selection.withIndex({}, mock);
+  t.test('toggleClass()', st => {
+    let actual = selection.toggleClass(1);
+    let expect = SELECTED_CLASS;
 
-  let actual = selection.toggleClass(1);
-  let expect = SELECTED_CLASS;
+    st.equal(actual, expect, 'should return the selected class');
 
-  t.equal(actual, expect, 'should return the selected class');
+    actual = selection.toggleClass(0);
+    expect = EMPTY;
 
-  actual = selection.toggleClass(0);
-  expect = EMPTY;
-
-  t.equal(actual, expect, 'should return empty string');
+    st.equal(actual, expect, 'should return empty string');
+    st.end();
+  });
 
   t.end();
 });
