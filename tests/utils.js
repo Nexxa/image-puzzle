@@ -6,7 +6,7 @@
 // Imports
 // -------
 import test from 'tape';
-import {pairs, containedIn, rangeFrom0, propWithPx} from '../lib/utils';
+import {pairs, containedIn, rangeFrom0, propWithPx, showEl, hideEl} from '../lib/utils';
 
 // Tests
 // -----
@@ -45,6 +45,26 @@ test('Lib: utils', t => {
     const expect = '10px';
 
     st.equal(actual, expect, 'should returns the property object with "px"');
+    st.end();
+  });
+
+  t.test('showEl()', st => {
+    const el = {style: {visibility: ''}};
+    showEl(el);
+    const actual = el.style.visibility;
+    const expect = 'visible';
+
+    st.equal(actual, expect, 'should set "visibility" to "visible"');
+    st.end();
+  });
+
+  t.test('hideEl()', st => {
+    const el = {style: {visibility: ''}};
+    hideEl(el);
+    const actual      = el.style.visibility;
+    const expect      = 'hidden';
+
+    st.equal(actual, expect, 'should set "visibility" to "hidden"');
     st.end();
   });
 

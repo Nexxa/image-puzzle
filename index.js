@@ -6,6 +6,7 @@
 // Imports
 // -------
 import R from 'ramda';
+import {showEl, hideEl} from './lib/utils';
 import puzzle from './lib/puzzle';
 import virtualdom from './lib/virtualdom';
 
@@ -238,28 +239,4 @@ function imagePuzzle(image = null, opts, onResolution) {
   function makeTheMove(move) {
     return flipAndSave(...move, last());
   }
-}
-
-/**
- * Shows element - bad ol' javascript DOM api...
- * @private
- * @param  {HTMLElement} el - HTML element
- * @return {HTMLElement} HTMLElement
- */
-function showEl(el) {
-  el.style.visibility = 'visible';
-
-  return el;
-}
-
-/**
- * Hides element - bad ol' javascript DOM api...
- * @private
- * @param  {HTMLElement} el - HTML element
- * @return {HTMLElement} HTMLElement
- */
-function hideEl(el) {
-  el.style.visibility = 'hidden';
-
-  return el;
 }
