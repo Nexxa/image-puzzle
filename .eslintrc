@@ -3,12 +3,27 @@
   "ecmaFeatures": {
     "modules": true
   },
+  "parserOptions": {
+    "sourceType": "module"
+  },
   "rules": {
-    "indent": [2, 2, { "VariableDeclarator": 2 }],
+    "indent": [2, 2, {
+      "VariableDeclarator": 2
+    }],
     "one-var": [2, "never"],
     "quotes": [2, "single"],
     "linebreak-style": [2, "unix"],
-    "semi": [2, "always"]
+    "semi": [2, "always"],
+    "prefer-arrow-callback": 2,
+    "prefer-const": 2,
+    "prefer-spread": 2,
+    "prefer-template": 2,
+    "arrow-body-style": [2, "as-needed"],
+    "arrow-parens": [2, "as-needed"],
+    "arrow-spacing": [2, {
+      "before": true,
+      "after": true
+    }]
   },
   "env": {
     "es6": true,
