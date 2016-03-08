@@ -54,6 +54,14 @@ const merge = R.pipe(R.reject(R.isNil), R.mergeAll);
  */
 const tapFnOrIdentity = R.compose(R.tap, R.defaultTo(R.identity));
 
+/**
+ * @func showAndClean - Shows image and return null in order to cleans the puzzle.
+ * @private
+ * @curried
+ * @return {Function}
+ */
+const showAndClean = R.pipe(R.prop('image'), showEl, R.always(null));
+
 // Instance
 // --------------
 /**
@@ -69,9 +77,10 @@ const tapFnOrIdentity = R.compose(R.tap, R.defaultTo(R.identity));
  * @param  {HTMLImageElement} [image=null]   - Image html element
  * @param  {object}           [opts]         - Configuration
  * @param  {function}         [onResolution] - Callback on puzzle resolution
+ * @param  {function}         [onFlip]       - Callback on pieces flip
  * @return {object} Image Puzzle object
  */
-function imagePuzzle(image = null, opts, onResolution) {
+function imagePuzzle(image = null, opts, onResolution, onFlip) {
   if (image === null) {
     return null;
   }
@@ -92,14 +101,6 @@ function imagePuzzle(image = null, opts, onResolution) {
   * @private
   */
   const vdom = virtualdom({ onSelect: makeTheMove });
-
-  /**
-   * @func showAndClean - Shows image and return null in order to cleans the puzzle.
-   * @private
-   * @curried
-   * @return {Function}
-   */
-  const showAndClean = R.pipe(R.prop('image'), showEl, R.always(null));
 
   /**
    * @func resolveThenShowClean - Run "onResolution" callback and then shows the image and cleans the puzzle.
@@ -139,7 +140,7 @@ function imagePuzzle(image = null, opts, onResolution) {
    * @curried
    * @return {Function}
    */
-  const flipAndSave = R.pipe(puzzle.flip, last, R.tap(vdom.update), runResolutionOnWin);
+  const flipAndSave = R.pipe(puzzle.flip, last, tapFnOrIdentity(onFlip), R.tap(vdom.update), runResolutionOnWin);
 
   // Public API
   // ----------

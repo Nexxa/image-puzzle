@@ -24,7 +24,7 @@ function onload() {
 }
 
 function run(image) {
-  const puzzle = imagePuzzle(image, config(), resolution);
+  const puzzle = imagePuzzle(image, config(), resolution, flip);
 
   click('update',  () => puzzle.update());
   click('build33', () => puzzle.rebuild(3, 3));
@@ -43,6 +43,14 @@ function config() {
   }
 
   return {rows: 3, cols: 3};
+}
+
+function flip(data) {
+  if (!window.console) {
+    return;
+  }
+
+  return window.console.log(data);
 }
 
 function resolution() {
