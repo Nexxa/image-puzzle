@@ -35,24 +35,6 @@ test('imagePuzzle()', t => {
       st.end();
     });
 
-    t.test('show image', st => {
-      const puzzleImage = puzzle.show();
-      const actual      = puzzleImage.style.visibility;
-      const expect      = 'visible';
-
-      st.equal(actual, expect, 'should set "visibility" to "visible"');
-      st.end();
-    });
-
-    t.test('hide image', st => {
-      const puzzleImage = puzzle.hide();
-      const actual      = puzzleImage.style.visibility;
-      const expect      = 'hidden';
-
-      st.equal(actual, expect, 'should set "visibility" to "hidden"');
-      st.end();
-    });
-
     t.end();
   });
 
