@@ -53,6 +53,15 @@ test('Lib: virtualdom', t => {
       st.end();
     });
 
+    t.test('update(null) - clean the container', st => {
+      const cleaned = vdom.update(null);
+      const actual = cleaned.children.length;
+      const expect = 0;
+
+      st.equal(actual, expect, 'number of pieces should be 0');
+      st.end();
+    });
+
     t.end();
   });
 

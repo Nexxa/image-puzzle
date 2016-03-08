@@ -94,12 +94,28 @@ function imagePuzzle(image = null, opts, onResolution) {
   const vdom = virtualdom({ onSelect: makeTheMove });
 
   /**
-   * @func runResolutionOnWin - Checks pieces sequence and if it is winning calls onResolution callback.
+   * @func showAndClean - Shows image and return null in order to cleans the puzzle.
    * @private
    * @curried
    * @return {Function}
    */
-  const runResolutionOnWin = R.when(puzzle.win, tapFnOrIdentity(onResolution));
+  const showAndClean = R.pipe(R.prop('image'), showEl, R.always(null));
+
+  /**
+   * @func resolveThenShowClean - Run "onResolution" callback and then shows the image and cleans the puzzle.
+   * @private
+   * @curried
+   * @return {Function}
+   */
+  const resolveThenShowClean = R.pipe(tapFnOrIdentity(onResolution), showAndClean);
+
+  /**
+   * @func runResolutionOnWin - Checks pieces sequence and if it is winning runs resolution.
+   * @private
+   * @curried
+   * @return {Function}
+   */
+  const runResolutionOnWin = R.when(puzzle.win, resolveThenShowClean);
 
   /**
    * @func runAndSave - Runs the puzzle with, saves last and renders the virtualdom
@@ -132,9 +148,7 @@ function imagePuzzle(image = null, opts, onResolution) {
     config,
     update,
     state,
-    rebuild,
-    show,
-    hide
+    rebuild
   };
 
   /**
@@ -185,24 +199,6 @@ function imagePuzzle(image = null, opts, onResolution) {
     const data = { rows: rows, cols: cols, pairs: null };
 
     return updateAndSave(config([data]));
-  }
-
-  /**
-   * Shows image
-   * @public
-   * @return {HTMLImageElement} Image element
-   */
-  function show() {
-    return showEl(image);
-  }
-
-  /**
-   * Hides image
-   * @private
-   * @return {HTMLImageElement} Image element
-   */
-  function hide() {
-    return hideEl(image);
   }
 
   /**
