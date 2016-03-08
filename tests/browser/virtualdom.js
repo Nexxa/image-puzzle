@@ -12,12 +12,10 @@ import {CONTAINER_CLASS} from '../../lib/virtualdom';
 
 // Tests
 // -----
-test('virtualdom.render() renders a puzzle-pieces tree', function(t) {
-  t.plan(3);
-
+test('Lib: virtualdom', t => {
   imageHelper('vdom1', function() {
-    let image = this;
-    let data  = {
+    const image = this;
+    const data  = {
       image: image,
       rows: 2,
       cols: 2,
@@ -28,21 +26,44 @@ test('virtualdom.render() renders a puzzle-pieces tree', function(t) {
         [{row:1, col:1, width:100, height:100, x:-100, y:-100},{position:3, bgX:-100, bgY:-100}]
       ]
     };
-    let vdom     = virtualdom();
-    let rendered = vdom.render(data);
+    const vdom     = virtualdom();
+    const rendered = vdom.render(data);
 
-    let actual = rendered.tagName.toLowerCase();
-    let expect = 'div';
-    t.equal(actual, expect, 'tagName should be "div"');
+    t.test('render() -> tag', st => {
+      const actual = rendered.tagName.toLowerCase();
+      const expect = 'div';
 
-    actual = rendered.properties.className;
-    expect = CONTAINER_CLASS.substring(1);
-    t.equal(actual, expect, 'className should be equal to CONTAINER_CLASS const');
+      st.equal(actual, expect, 'tagName should be "div"');
+      st.end();
+    });
 
-    actual = rendered.children.length;
-    expect = data.rows * data.cols;
-    t.equal(actual, expect, 'number of pieces should be rows * columns');
+    t.test('render() -> class', st => {
+      const actual = rendered.properties.className;
+      const expect = CONTAINER_CLASS.substring(1);
+
+      st.equal(actual, expect, 'className should be equal to CONTAINER_CLASS const');
+      st.end();
+    });
+
+    t.test('render() -> length', st => {
+      const actual = rendered.children.length;
+      const expect = data.rows * data.cols;
+
+      st.equal(actual, expect, 'number of pieces should be rows * columns');
+      st.end();
+    });
+
+    t.test('update(null) - clean the container', st => {
+      const cleaned = vdom.update(null);
+      const actual = cleaned.children.length;
+      const expect = 0;
+
+      st.equal(actual, expect, 'number of pieces should be 0');
+      st.end();
+    });
+
+    t.end();
   });
 
-  t.timeoutAfter(10 * 1000);
+  t.timeoutAfter(60 * 1000);
 });

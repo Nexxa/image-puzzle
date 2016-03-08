@@ -10,7 +10,7 @@ Check out example [here](http://nexxa.github.io/image-puzzle/).
 
 ## API
 
-### `imagePuzzle(image, [opts, onResolution])`
+### `imagePuzzle(image, [opts, onResolution, onFlip])`
 ```javascript
 /**
  * Creates a new Image Puzzle object.
@@ -18,6 +18,7 @@ Check out example [here](http://nexxa.github.io/image-puzzle/).
  * @param  {HTMLImageElement} [image=null]   - Image html element
  * @param  {object}           [opts]         - Configuration
  * @param  {function}         [onResolution] - Callback on puzzle resolution
+ * @param  {function}         [onFlip]       - Callback on pieces flip
  * @return {object} Image Puzzle object
  */
 ```
@@ -83,8 +84,13 @@ Configuration object:
 <script>
   // Pick an image
   const image = document.getElementById('puzzle-img');
-  // Init puzzle with  4x4 grid and with alert on resolution
-  const puzzle = imagePuzzle(image, {rows: 4, cols: 4}, () => alert('Puzzle resolved!'));
+  // Init puzzle with  4x4 grid and with alert on resolution and log on flip
+  const puzzle = imagePuzzle(
+    image,
+    {rows: 4, cols: 4},
+    () => alert('Puzzle resolved!'),
+    data => console.log(data)
+  );
 
   // Update the puzzle
   document.getElementById('update').addEventListener('click', () => puzzle.update());

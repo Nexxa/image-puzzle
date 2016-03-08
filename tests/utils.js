@@ -6,47 +6,67 @@
 // Imports
 // -------
 import test from 'tape';
-import {pairs, containedIn, rangeFrom0, propWithPx} from '../lib/utils';
+import {pairs, containedIn, rangeFrom0, propWithPx, showEl, hideEl} from '../lib/utils';
 
 // Tests
 // -----
-test('utils.pairs() gets pairs property from object', function(t) {
-  let data   = {pairs: [['a'], [1]]};
-  let actual = pairs(data);
-  let expect = data.pairs;
+test('Lib: utils', t => {
+  test('pairs() gets pairs property from object', st => {
+    let data   = {pairs: [['a'], [1]]};
+    const actual = pairs(data);
+    const expect = data.pairs;
 
-  t.deepEqual(actual, expect, 'should gets the value of pairs property');
+    st.deepEqual(actual, expect, 'should gets the value of pairs property');
 
-  data = {data: [1,2,3]};
-  t.notOk(pairs(data), 'should returns undefined is property is not in object');
+    data = {data: [1,2,3]};
+    st.notOk(pairs(data), 'should returns undefined is property is not in object');
+    st.end();
+  });
 
-  t.end();
-});
+  test('containedIn() checks if collection contains item', st => {
+    const collection = [0,1,2,3,4];
 
-test('utils.containedIn() checks if collection contains item', function(t) {
-  let collection = [0,1,2,3,4];
+    st.ok(containedIn(collection, 2), 'should returns true if item is in collection');
+    st.notOk(containedIn(collection, 5), 'should returns false if item is not in collection');
+    st.end();
+  });
 
-  t.ok(containedIn(collection, 2), 'should returns true if item is in collection');
-  t.notOk(containedIn(collection, 5), 'should returns false if item is not in collection');
+  test('rangeFrom0() create a range of indexes from 0', st => {
+    const actual = rangeFrom0(5);
+    const expect = [0,1,2,3,4];
 
-  t.end();
-});
+    st.deepEqual(actual, expect, 'should returns an array of indexes from 0');
+    st.end();
+  });
 
-test('utils.rangeFrom0() create a range of indexes from 0', function(t) {
-  let actual = rangeFrom0(5);
-  let expect = [0,1,2,3,4];
+  test('propWithPx() gets property with px', st => {
+    const data = {x: 10};
+    const actual = propWithPx('x', data);
+    const expect = '10px';
 
-  t.deepEqual(actual, expect, 'should returns an array of indexes from 0');
+    st.equal(actual, expect, 'should returns the property object with "px"');
+    st.end();
+  });
 
-  t.end();
-});
+  t.test('showEl()', st => {
+    const el = {style: {visibility: ''}};
+    showEl(el);
+    const actual = el.style.visibility;
+    const expect = 'visible';
 
-test('utils.propWithPx() gets property with px', function(t) {
-  let data = {x: 10};
-  let actual = propWithPx('x', data);
-  let expect = '10px';
+    st.equal(actual, expect, 'should set "visibility" to "visible"');
+    st.end();
+  });
 
-  t.equal(actual, expect, 'should returns the property object with "px"');
+  t.test('hideEl()', st => {
+    const el = {style: {visibility: ''}};
+    hideEl(el);
+    const actual      = el.style.visibility;
+    const expect      = 'hidden';
+
+    st.equal(actual, expect, 'should set "visibility" to "hidden"');
+    st.end();
+  });
 
   t.end();
 });
