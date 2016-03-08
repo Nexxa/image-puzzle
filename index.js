@@ -75,13 +75,6 @@ function imagePuzzle(image = null, opts, onResolution) {
     return null;
   }
 
-  // Private properties
-  // ------------------
-  /**
-   * @property {object} vdom - Instance of virtualdom.
-   * @private
-   */
-  const vdom = virtualdom({ onSelect: makeTheMove });
   /**
    * @property {object} configuration - Holds instance configuration.
    * @private
@@ -92,6 +85,13 @@ function imagePuzzle(image = null, opts, onResolution) {
    * @private
    */
   let lastRun = {};
+
+  /**
+  * @property {object} vdom - Instance of virtualdom.
+  * @private
+  */
+  const vdom = virtualdom({ onSelect: makeTheMove });
+
   /**
    * @func runResolutionOnWin - Checks pieces sequence and if it is winning calls onResolution callback.
    * @private
@@ -99,6 +99,7 @@ function imagePuzzle(image = null, opts, onResolution) {
    * @return {Function}
    */
   const runResolutionOnWin = R.when(puzzle.win, tapFnOrIdentity(onResolution));
+
   /**
    * @func runAndSave - Runs the puzzle with, saves last and renders the virtualdom
    * @private
@@ -106,6 +107,7 @@ function imagePuzzle(image = null, opts, onResolution) {
    * @return {Function}
    */
   const runAndSave = R.pipe(puzzle.run, last, R.tap(vdom.render));
+
   /**
    * @func updateAndSave - Updates the puzzle with data, saves last and updates the virtualdom
    * @private
@@ -113,6 +115,7 @@ function imagePuzzle(image = null, opts, onResolution) {
    * @return {Function}
    */
   const updateAndSave = R.pipe(puzzle.update, last, R.tap(vdom.update), runResolutionOnWin);
+
   /**
    * @func flipAndSave - Flips two pieces, saves last and updates the virtualdom
    * @private
@@ -124,15 +127,15 @@ function imagePuzzle(image = null, opts, onResolution) {
   // Public API
   // ----------
   return {
-    _first : start(),
-    config : config,
-    update : update,
-    state  : state,
-    rebuild: rebuild
+    _first : start(image, opts),
+    config,
+    update,
+    state,
+    rebuild,
+    show,
+    hide
   };
 
-  // Public methods
-  // --------------
   /**
    * Gets or sets image puzzle configuration.
    * @public
@@ -183,8 +186,24 @@ function imagePuzzle(image = null, opts, onResolution) {
     return updateAndSave(config([data]));
   }
 
-  // Private methods
-  // ---------------
+  /**
+   * Shows image
+   * @public
+   * @return {HTMLImageElement} Image element
+   */
+  function show() {
+    return showEl(image);
+  }
+
+  /**
+   * Hides image
+   * @private
+   * @return {HTMLImageElement} Image element
+   */
+  function hide() {
+    return hideEl(image);
+  }
+
   /**
    * Gets or sets the last puzzle data object.
    * @private
@@ -204,8 +223,8 @@ function imagePuzzle(image = null, opts, onResolution) {
    * @private
    * @return {object} Puzzle data object
    */
-  function start() {
-    const data = config([DEFAULTS, { image: image }, opts]);
+  function start(image, opts) {
+    const data = config([DEFAULTS, { image: hideEl(image) }, opts]);
 
     return runAndSave(data);
   }
@@ -219,4 +238,28 @@ function imagePuzzle(image = null, opts, onResolution) {
   function makeTheMove(move) {
     return flipAndSave(...move, last());
   }
+}
+
+/**
+ * Shows element - bad ol' javascript DOM api...
+ * @private
+ * @param  {HTMLElement} el - HTML element
+ * @return {HTMLElement} HTMLElement
+ */
+function showEl(el) {
+  el.style.visibility = 'visible';
+
+  return el;
+}
+
+/**
+ * Hides element - bad ol' javascript DOM api...
+ * @private
+ * @param  {HTMLElement} el - HTML element
+ * @return {HTMLElement} HTMLElement
+ */
+function hideEl(el) {
+  el.style.visibility = 'hidden';
+
+  return el;
 }
