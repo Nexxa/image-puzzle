@@ -77,9 +77,10 @@ const showAndClean = R.pipe(R.prop('image'), showEl, R.always(null));
  * @param  {HTMLImageElement} [image=null]   - Image html element
  * @param  {object}           [opts]         - Configuration
  * @param  {function}         [onResolution] - Callback on puzzle resolution
+ * @param  {function}         [onFlip]       - Callback on pieces flip
  * @return {object} Image Puzzle object
  */
-function imagePuzzle(image = null, opts, onResolution) {
+function imagePuzzle(image = null, opts, onResolution, onFlip) {
   if (image === null) {
     return null;
   }
@@ -139,7 +140,7 @@ function imagePuzzle(image = null, opts, onResolution) {
    * @curried
    * @return {Function}
    */
-  const flipAndSave = R.pipe(puzzle.flip, last, R.tap(vdom.update), runResolutionOnWin);
+  const flipAndSave = R.pipe(puzzle.flip, last, tapFnOrIdentity(onFlip), R.tap(vdom.update), runResolutionOnWin);
 
   // Public API
   // ----------
