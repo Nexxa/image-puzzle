@@ -54,6 +54,14 @@ const merge = R.pipe(R.reject(R.isNil), R.mergeAll);
  */
 const tapFnOrIdentity = R.compose(R.tap, R.defaultTo(R.identity));
 
+/**
+ * @func showAndClean - Shows image and return null in order to cleans the puzzle.
+ * @private
+ * @curried
+ * @return {Function}
+ */
+const showAndClean = R.pipe(R.prop('image'), showEl, R.always(null));
+
 // Instance
 // --------------
 /**
@@ -92,14 +100,6 @@ function imagePuzzle(image = null, opts, onResolution) {
   * @private
   */
   const vdom = virtualdom({ onSelect: makeTheMove });
-
-  /**
-   * @func showAndClean - Shows image and return null in order to cleans the puzzle.
-   * @private
-   * @curried
-   * @return {Function}
-   */
-  const showAndClean = R.pipe(R.prop('image'), showEl, R.always(null));
 
   /**
    * @func resolveThenShowClean - Run "onResolution" callback and then shows the image and cleans the puzzle.
