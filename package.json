@@ -48,7 +48,8 @@
   "dependencies": {
     "ramda": "0.19.1",
     "shuffle-array": "0.1.2",
-    "virtual-dom": "2.1.1"
+    "virtual-dom": "2.1.1",
+    "virtual-dom-hammerjs": "1.1.1"
   },
   "devDependencies": {
     "babel-cli": "6.4.5",
