@@ -21,10 +21,11 @@ export default imagePuzzle;
  * @public
  */
 export const DEFAULTS = {
-  image: null,
-  rows : 3,
-  cols : 3,
-  pairs: null
+  image   : null,
+  rows    : 3,
+  cols    : 3,
+  pairs   : null,
+  disabled: false
 };
 
 /**
@@ -68,9 +69,10 @@ const showAndClean = R.pipe(R.prop('image'), showEl, R.always(null));
  * Creates a new Image Puzzle object.<br/>
  * Available configuration:
  * {
- *   rows: <Number>, // Number of rows - Default 3
- *   cols: <Number>, // Number of columns - Default 3
- *   pairs: <Array>  // Data loaded from another source (localStorge, ajax etc) - Default null
+ *   rows:     <Number>, // Number of rows - Default 3
+ *   cols:     <Number>, // Number of columns - Default 3
+ *   pairs:    <Array>   // Data loaded from another source (localStorge, ajax etc) - Default null
+ *   disabled: <Boolean> // Do-not-play option - Default false
  * }
  *
  * @public

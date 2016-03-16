@@ -24,10 +24,18 @@ test('Lib: virtualdom', t => {
         [{row:0, col:1, width:100, height:100, x:100, y:0},{position:1, bgX:-100, bgY:0}],
         [{row:1, col:0, width:100, height:100, x:0, y:-100},{position:2, bgX:0, bgY:-100}],
         [{row:1, col:1, width:100, height:100, x:-100, y:-100},{position:3, bgX:-100, bgY:-100}]
-      ]
+      ],
+      disabled: false
     };
     const vdom     = virtualdom();
     const rendered = vdom.render(data);
+
+    t.test('render() -> hammer', st => {
+      const actual = rendered.properties.hammer;
+
+      st.ok(actual, 'rendered tree should have "hammer" property when disabled is false');
+      st.end();
+    });
 
     t.test('render() -> tag', st => {
       const actual = rendered.tagName.toLowerCase();
