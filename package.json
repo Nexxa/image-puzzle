@@ -42,7 +42,7 @@
     "example": "browserify -d $npm_package_config_babelify $npm_package_config_build_output",
     "watch": "watchify -dv $npm_package_config_babelify $npm_package_config_build_output",
     "preserve": "npm run clean && npm run example",
-    "serve": "http-server ./",
+    "serve": "npm run watch & http-server ./",
     "start": "npm run serve -- -o"
   },
   "dependencies": {
