@@ -18,7 +18,7 @@ test('imagePuzzle()', t => {
 
     t.test('new puzzle', st => {
       const actual = puzzle.config();
-      const expect = {image: image, rows: 3, cols: 3, pairs: null};
+      const expect = {image: image, rows: 3, cols: 3, pairs: null, disabled: false};
 
       st.ok(puzzle, 'should not have errors');
       st.deepEqual(actual, expect, 'should use default config()s');
@@ -55,7 +55,7 @@ test('imagePuzzle() with specified configuration', t => {
 
     t.test('new puzzle with config', st => {
       const actual = puzzle.config();
-      const expect = {image: image, rows: config.rows, cols: config.cols, pairs: config.pairs};
+      const expect = {image: image, rows: config.rows, cols: config.cols, pairs: config.pairs, disabled: false};
 
       st.deepEqual(actual, expect, 'should use specified configuration');
       st.end();
@@ -63,7 +63,7 @@ test('imagePuzzle() with specified configuration', t => {
 
     t.test('game state', st => {
       const actual = puzzle.state();
-      const expect = {rows: config.rows, cols: config.cols, pairs: config.pairs};
+      const expect = {rows: config.rows, cols: config.cols, pairs: config.pairs, disabled: false};
 
       st.deepEqual(actual, expect, 'should return the current game state as simple object');
       st.end();
@@ -72,7 +72,7 @@ test('imagePuzzle() with specified configuration', t => {
     t.test('game state as json string', st => {
       const asString = true;
       const actual   = puzzle.state(asString);
-      const expect   = JSON.stringify({rows: config.rows, cols: config.cols, pairs: config.pairs});
+      const expect   = JSON.stringify({rows: config.rows, cols: config.cols, pairs: config.pairs, disabled: false});
 
       st.deepEqual(actual, expect, 'should return the current game state as stringify JSON');
       st.end();
